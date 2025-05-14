@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LuesHub D&D Dashboard">
+    <meta name="theme-color" content="#7b2cbf">
+    <title>Dashboard - LuesHub Dungeons & Dragons</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=MedievalSharp&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Top Navigation Bar -->
+        <nav class="navbar">
+            <div class="navbar-logo">
+                <a href="dashboard.html">
+                    <h1>LuesHub D&D</h1>
+                </a>
+            </div>
+            
+            <div class="navbar-menu">
+                <a href="dashboard.html" class="navbar-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="characters.html" class="navbar-item">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Characters</span>
+                </a>
+                <a href="campaigns.html" class="navbar-item">
+                    <i class="fas fa-book-open"></i>
+                    <span>Campaigns</span>
+                </a>
+                <a href="dice_roller.html" class="navbar-item">
+                    <i class="fas fa-dice-d20"></i>
+                    <span>Dice Roller</span>
+                </a>
+            </div>
+            
+            <div class="navbar-end">
+                <div class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-sun"></i>
+                </div>
+                <div class="user-menu">
+                    <span id="username">Adventurer</span>
+                    <div class="user-menu-dropdown">
+                        <a href="profile.html">Profile</a>
+                        <a href="settings.html">Settings</a>
+                        <a href="logout.php">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="dashboard-header">
+                <h2>Welcome to Your Adventure Hub</h2>
+                <p>Manage your characters, campaigns, and roll some dice!</p>
+            </div>
+            
+            <div class="dashboard-grid">
+                <!-- Character Module -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-user-shield"></i> Your Characters</h3>
+                        <a href="characters.html" class="card-header-action">View All</a>
+                    </div>
+                    <div class="card-content" id="characters-preview">
+                        <div class="loading-spinner">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Campaign Module -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-book-open"></i> Active Campaigns</h3>
+                        <a href="campaigns.html" class="card-header-action">View All</a>
+                    </div>
+                    <div class="card-content" id="campaigns-preview">
+                        <div class="loading-spinner">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Rolls Module -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-dice-d20"></i> Recent Rolls</h3>
+                        <a href="dice_roller.html" class="card-header-action">Roll Dice</a>
+                    </div>
+                    <div class="card-content">
+                        <div id="recent-rolls">
+                            <div class="loading-spinner">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions Module -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="quick-actions-grid">
+                            <a href="character_edit.php" class="quick-action-item">
+                                <i class="fas fa-plus"></i>
+                                <span>New Character</span>
+                            </a>
+                            <a href="dice_roller.html" class="quick-action-item">
+                                <i class="fas fa-dice"></i>
+                                <span>Roll Dice</span>
+                            </a>
+                            <a href="campaigns.html" class="quick-action-item">
+                                <i class="fas fa-users"></i>
+                                <span>Join Campaign</span>
+                            </a>
+                            <a href="notes.html" class="quick-action-item">
+                                <i class="fas fa-sticky-note"></i>
+                                <span>Notes</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2025 LuesHub D&D. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#privacy">Privacy</a>
+                    <a href="#terms">Terms</a>
+                    <a href="#contact">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme toggle functionality
+            const themeToggle = document.getElementById('theme-toggle');
+            const htmlElement = document.documentElement;
+            
+            themeToggle.addEventListener('click', function() {
+                if (htmlElement.getAttribute('data-theme') === 'light') {
+                    htmlElement.setAttribute('data-theme', 'dark');
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    htmlElement.setAttribute('data-theme', 'light');
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+            
+            // Check saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                htmlElement.setAttribute('data-theme', savedTheme);
+                if (savedTheme === 'dark') {
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                }
+            }
+            
+            // Get user data
+            fetch('api/session_check.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.logged_in) {
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    
+                    // Set username in navbar
+                    document.getElementById('username').textContent = data.username;
+                    
+                    // Fetch character preview
+                    return fetch(`api/character_fix.php?user_id=${data.user_id}`);
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const charactersPreview = document.getElementById('characters-preview');
+                    
+                    if (data.characters && data.characters.length > 0) {
+                        // Show characters
+                        charactersPreview.innerHTML = '';
+                        
+                        // Show up to 3 characters
+                        const characters = data.characters.slice(0, 3);
+                        
+                        characters.forEach(character => {
+                            const characterCard = document.createElement('div');
+                            characterCard.className = 'character-preview-item';
+                            characterCard.innerHTML = `
+                                <div class="character-preview-name">${character.name}</div>
+                                <div class="character-preview-meta">
+                                    <span>Level ${character.level} ${character.race} ${character.class}</span>
+                                </div>
+                                <a href="character.html?id=${character.id}" class="character-preview-action">Play</a>
+                            `;
+                            
+                            charactersPreview.appendChild(characterCard);
+                        });
+                        
+                        if (data.characters.length > 3) {
+                            const moreText = document.createElement('div');
+                            moreText.className = 'more-text';
+                            moreText.innerHTML = `+ ${data.characters.length - 3} more character(s)`;
+                            charactersPreview.appendChild(moreText);
+                        }
+                    } else {
+                        // Show no characters message
+                        charactersPreview.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-user-plus"></i>
+                                <p>No characters yet. Create your first one!</p>
+                                <a href="character_edit.php" class="empty-state-action">Create Character</a>
+                            </div>
+                        `;
+                    }
+                    
+                    // Fetch campaigns
+                    return fetch('api/campaigns.php');
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    // Show error in characters preview
+                    document.getElementById('characters-preview').innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <p>Error loading characters.</p>
+                        </div>
+                    `;
+                    
+                    // Show error in campaigns preview
+                    document.getElementById('campaigns-preview').innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <p>Error loading campaigns.</p>
+                        </div>
+                    `;
+                    
+                    // Show no rolls
+                    document.getElementById('recent-rolls').innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-dice"></i>
+                            <p>No recent dice rolls.</p>
+                            <a href="dice_roller.html" class="empty-state-action">Roll Some Dice</a>
+                        </div>
+                    `;
+                });
+                
+            // Handle campaign loading separately
+            setTimeout(() => {
+                document.getElementById('campaigns-preview').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-book"></i>
+                        <p>No active campaigns.</p>
+                        <a href="campaigns.html" class="empty-state-action">Browse Campaigns</a>
+                    </div>
+                `;
+                
+                document.getElementById('recent-rolls').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-dice"></i>
+                        <p>No recent dice rolls.</p>
+                        <a href="dice_roller.html" class="empty-state-action">Roll Some Dice</a>
+                    </div>
+                `;
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
