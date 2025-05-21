@@ -1,27 +1,20 @@
-function selectHeader(key, children){
-  switch (key) {
-    case key === "h1":
-      return <h1>{children}</h1>;
-    case key === "h2":
-      return <h2>{children}</h2>;
-    case key === "h3":
-      return <h3>{children}</h3>;
-          case key === "h4":
-      return <h4>{children}</h4>;
-    default:
-      break;
-  }
-}
+const headingTags = {
+  h1: 'h1',
+  h2: 'h2',
+  h3: 'h3',
+  h4: 'h4',
+  h5: 'h5',
+  h6: 'h6'
+};
 
-const Header = ({style, children}) => {
-  return (
-    <>{selectHeader(style, children)}</>
-  )
-}
+const Header = ({ as = 'h2', children }) => {
+  const Tag = headingTags[as] || 'h2';
+  return <Tag>{children}</Tag>;
+};
 
 Header.defaultProps = {
-  style: "h2",
-  children: "Hello World"
-}
+  as: 'h2',
+  children: 'Hello World'
+};
 
-export default Header
+export default Header;
