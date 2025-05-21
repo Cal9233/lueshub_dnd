@@ -1,23 +1,19 @@
-import { useState } from 'react';
+import withFormHandling from '../hoc/withFormHandling';
 import Footer from '../Components/Footer/Footer';
 import Header from '../Components/Headers/Header';
 import '../App.css';
 
-const LoginPage = () => {
-  const [error, setError] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const username = form.username.value.trim();
-    const password = form.password.value.trim();
-    if (!username || !password) {
-      setError('Please fill in all fields');
-    } else {
-      setError('');
-      // Placeholder for real authentication
-    }
-  };
+const LoginPage = ({ formData, handleChange, handleSubmit, error }) => {
+  const onSubmit = (e) =>
+    handleSubmit(e, (values, { setError }) => {
+      const { username = '', password = '' } = values;
+      if (!username.trim() || !password.trim()) {
+        setError('Please fill in all fields');
+      } else {
+        setError('');
+        // Placeholder for real authentication
+      }
+    });
 
   return (
     <div className="app">
@@ -31,14 +27,28 @@ const LoginPage = () => {
         <div className="login-form-container">
           <Header as="h2">Adventurer Login</Header>
           {error && <div className="error-message">{error}</div>}
-          <form onSubmit={handleSubmit} className="login-form">
+          <form onSubmit={onSubmit} className="login-form">
             <div className="form-group">
               <label htmlFor="username">Username</label>
-              <input id="username" name="username" type="text" required />
+              <input
+                id="username"
+                name="username"
+                type="text"
+                value={formData.username || ''}
+                onChange={handleChange}
+                required
+              />
             </div>
             <div className="form-group">
               <label htmlFor="password">Password</label>
-              <input id="password" name="password" type="password" required />
+              <input
+                id="password"
+                name="password"
+                type="password"
+                value={formData.password || ''}
+                onChange={handleChange}
+                required
+              />
             </div>
             <button type="submit" className="cta-button login-button">Login</button>
           </form>
@@ -62,4 +72,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default withFormHandling(LoginPage, { username: '', password: '' });
