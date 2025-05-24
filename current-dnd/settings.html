@@ -3,13 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="LuesHub D&D Dashboard">
+    <meta name="description" content="LuesHub D&D Settings">
     <meta name="theme-color" content="#7b2cbf">
-    <title>Dashboard - LuesHub Dungeons & Dragons</title>
+    <title>Settings - LuesHub Dungeons & Dragons</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=MedievalSharp&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="dashboard.css">
-    <script src="dashboard-card.js"></script>
+    <link rel="stylesheet" href="dashboard.css?v=20250524010956?v=20250524010956?v=20250524002628?v=20250524001828?v=20250523221304?v=20250523214655?v=20250523214004?v=20250523213330?v=20250523213015">
+    <style>
+        .placeholder-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 40px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+        .placeholder-icon {
+            font-size: 5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        .placeholder-title {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        .placeholder-text {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .back-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: var(--primary-dark);
+        }
+    </style>
 </head>
 <body>
     <div class="app">
@@ -22,7 +61,7 @@
             </div>
             
             <div class="navbar-menu">
-                <a href="dashboard.html" class="navbar-item active">
+                <a href="dashboard.html" class="navbar-item">
                     <i class="fas fa-home"></i>
                     <span>Dashboard</span>
                 </a>
@@ -57,13 +96,26 @@
         
         <!-- Main Content -->
         <main class="main-content">
-            <div class="dashboard-header">
-                <h2>Welcome to Your Adventure Hub</h2>
-                <p>Manage your characters, campaigns, and roll some dice!</p>
-            </div>
-            
-            <div class="dashboard-grid" id="dashboard-grid">
-                <!-- Cards will be dynamically inserted here -->
+            <div class="placeholder-container">
+                <div class="placeholder-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <h1 class="placeholder-title">Settings Coming Soon!</h1>
+                <p class="placeholder-text">
+                    Account settings and preferences will be available here soon. You'll be able to customize your D&D experience!
+                </p>
+                <p class="placeholder-text">
+                    Features in development:
+                    <br>• Account management
+                    <br>• Password changes
+                    <br>• Email notifications
+                    <br>• Privacy settings
+                    <br>• Display preferences
+                    <br>• Game mechanics options
+                </p>
+                <a href="dashboard.html" class="back-button">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
             </div>
         </main>
         
@@ -81,8 +133,8 @@
     </div>
     
     <script>
+        // Theme toggle functionality
         document.addEventListener('DOMContentLoaded', function() {
-            // Theme toggle functionality
             const themeToggle = document.getElementById('theme-toggle');
             const htmlElement = document.documentElement;
             
@@ -107,10 +159,6 @@
                 }
             }
             
-            // Initialize dashboard with enhanced cards
-            const dashboardGrid = document.getElementById('dashboard-grid');
-            let userData = null;
-            
             // Get user data
             fetch('api/session_check.php')
                 .then(response => response.json())
@@ -119,62 +167,7 @@
                         window.location.href = 'login.html';
                         return;
                     }
-                    
-                    userData = data;
-                    
-                    // Set username in navbar
                     document.getElementById('username').textContent = data.username;
-                    
-                    // Create initial cards with loading state
-                    const charactersCard = createCharacterCard(null);
-                    const campaignsCard = createCampaignCard(null);
-                    const recentRollsCard = createRecentRollsCard(null);
-                    const quickActionsCard = createQuickActionsCard(data.role === 'dungeon_master');
-                    
-                    // Add cards to dashboard
-                    dashboardGrid.appendChild(charactersCard);
-                    dashboardGrid.appendChild(campaignsCard);
-                    dashboardGrid.appendChild(recentRollsCard);
-                    dashboardGrid.appendChild(quickActionsCard);
-                    
-                    // Initialize animations
-                    setTimeout(() => initCardAnimations(), 100);
-                    
-                    // Fetch character data
-                    return fetch(`api/character_fix.php?user_id=${data.user_id}`);
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Update characters card with data
-                    const charactersCard = createCharacterCard(data.characters);
-                    updateCardContent('characters-card', charactersCard.querySelector('.card-content').innerHTML);
-                    
-                    // Fetch campaigns
-                    return fetch('api/campaigns.php?v=' + Date.now());
-                })
-                .then(response => response.json())
-                .then(campaignData => {
-                    // Update campaigns card with data
-                    const campaigns = campaignData.success ? campaignData.campaigns : null;
-                    const campaignsCard = createCampaignCard(campaigns);
-                    updateCardContent('campaigns-card', campaignsCard.querySelector('.card-content').innerHTML);
-                    
-                    // For now, recent rolls stays empty
-                    // In a real implementation, you'd fetch recent rolls from the API
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                    
-                    // Show error states
-                    const errorContent = `
-                        <div class="empty-state">
-                            <i class="fas fa-exclamation-circle"></i>
-                            <p>Error loading data.</p>
-                        </div>
-                    `;
-                    
-                    updateCardContent('characters-card', errorContent);
-                    updateCardContent('campaigns-card', errorContent);
                 });
         });
     </script>

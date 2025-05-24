@@ -245,12 +245,43 @@ a:hover {
   border-radius: 0.5rem;
   box-shadow: var(--shadow-sm);
   overflow: hidden;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s, opacity 0.3s;
+  position: relative;
+}
+
+/* Card elevation variants */
+.dashboard-card--normal {
+  box-shadow: var(--shadow-sm);
+}
+
+.dashboard-card--raised {
+  box-shadow: var(--shadow-md);
+}
+
+.dashboard-card--floating {
+  box-shadow: var(--shadow-lg);
 }
 
 .dashboard-card:hover {
   transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Card animation */
+.dashboard-card {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.dashboard-card.card-animate-in {
+  animation: cardFadeIn 0.6s ease-out forwards;
+}
+
+@keyframes cardFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .card-header {
@@ -337,6 +368,79 @@ a:hover {
   font-size: 0.875rem;
   padding: 0.5rem;
   color: var(--text-muted);
+}
+
+/* Campaign Preview Items */
+.campaign-preview-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem;
+  border-radius: 0.375rem;
+  margin-bottom: 0.75rem;
+  background-color: var(--bg-tertiary);
+  transition: background-color 0.3s;
+}
+
+.campaign-preview-item:hover {
+  background-color: rgba(123, 44, 191, 0.1);
+}
+
+.campaign-preview-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.campaign-preview-meta {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.campaign-preview-action {
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+  background-color: var(--secondary-color);
+  color: white;
+  font-size: 0.8125rem;
+  transition: background-color 0.3s;
+}
+
+.campaign-preview-action:hover {
+  background-color: var(--primary-dark);
+  color: white;
+}
+
+/* Recent Rolls */
+.rolls-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.roll-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background-color: var(--bg-tertiary);
+  border-radius: 0.375rem;
+  transition: background-color 0.3s;
+}
+
+.roll-item:hover {
+  background-color: rgba(123, 44, 191, 0.1);
+}
+
+.roll-action {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.roll-result {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--primary-color);
 }
 
 /* Quick Actions */

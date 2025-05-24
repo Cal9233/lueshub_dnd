@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LuesHub D&D Master Controls">
+    <meta name="theme-color" content="#7b2cbf">
+    <title>Master Controls - LuesHub Dungeons & Dragons</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=MedievalSharp&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css?v=20250524010956?v=20250524010956?v=20250524002628?v=20250524001828?v=20250523221304?v=20250523214655?v=20250523214004">
+    <style>
+        .master-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 40px;
+        }
+        .master-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .master-icon {
+            font-size: 5rem;
+            color: #ffd700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        .master-title {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 3rem;
+            background: linear-gradient(135deg, #ffd700, #b8860b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        .master-subtitle {
+            font-size: 1.5rem;
+            color: #666;
+        }
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .control-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(184, 134, 11, 0.05));
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 
+                0 8px 32px rgba(255, 215, 0, 0.2),
+                inset 0 0 20px rgba(255, 215, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .control-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 
+                0 12px 40px rgba(255, 215, 0, 0.3),
+                inset 0 0 30px rgba(255, 215, 0, 0.15);
+        }
+        .control-icon {
+            font-size: 3rem;
+            color: #b8860b;
+            margin-bottom: 20px;
+        }
+        .control-title {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.5rem;
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+        .control-description {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+        }
+        .control-status {
+            font-size: 0.9rem;
+            color: #888;
+            font-style: italic;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #7b2cbf, #5a189a);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(123, 44, 191, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Top Navigation Bar -->
+        <nav class="navbar">
+            <div class="navbar-logo">
+                <a href="dashboard.html">
+                    <h1>LuesHub D&D</h1>
+                </a>
+            </div>
+            
+            <div class="navbar-menu">
+                <a href="dashboard.html" class="navbar-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="characters.html" class="navbar-item">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Characters</span>
+                </a>
+                <a href="campaigns.html" class="navbar-item">
+                    <i class="fas fa-book-open"></i>
+                    <span>Campaigns</span>
+                </a>
+                <a href="dice_roller.html" class="navbar-item">
+                    <i class="fas fa-dice-d20"></i>
+                    <span>Dice Roller</span>
+                </a>
+            </div>
+            
+            <div class="navbar-end">
+                <div class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-sun"></i>
+                </div>
+                <div class="user-menu">
+                    <span id="username">Dungeon Master</span>
+                    <div class="user-menu-dropdown">
+                        <a href="profile.html">Profile</a>
+                        <a href="settings.html">Settings</a>
+                        <a href="logout.php">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="master-container">
+                <div class="master-header">
+                    <div class="master-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h1 class="master-title">Dungeon Master Controls</h1>
+                    <p class="master-subtitle">Wield the power of the realm</p>
+                </div>
+                
+                <div class="controls-grid">
+                    <div class="control-card">
+                        <div class="control-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h2 class="control-title">Campaign Manager</h2>
+                        <p class="control-description">
+                            Create and manage epic campaigns. Control the narrative, NPCs, and world events.
+                        </p>
+                        <p class="control-status">Coming Soon</p>
+                    </div>
+                    
+                    <div class="control-card">
+                        <div class="control-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h2 class="control-title">Player Management</h2>
+                        <p class="control-description">
+                            Oversee player characters, approve changes, and manage party composition.
+                        </p>
+                        <p class="control-status">Coming Soon</p>
+                    </div>
+                    
+                    <div class="control-card">
+                        <div class="control-icon">
+                            <i class="fas fa-dragon"></i>
+                        </div>
+                        <h2 class="control-title">Monster Compendium</h2>
+                        <p class="control-description">
+                            Access and customize monsters, create encounters, and track combat.
+                        </p>
+                        <p class="control-status">Coming Soon</p>
+                    </div>
+                    
+                    <div class="control-card">
+                        <div class="control-icon">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <h2 class="control-title">World Builder</h2>
+                        <p class="control-description">
+                            Design maps, locations, and points of interest for your campaigns.
+                        </p>
+                        <p class="control-status">Coming Soon</p>
+                    </div>
+                    
+                    <div class="control-card">
+                        <div class="control-icon">
+                            <i class="fas fa-scroll"></i>
+                        </div>
+                        <h2 class="control-title">Quest Designer</h2>
+                        <p class="control-description">
+                            Create quests, manage objectives, and track party progress.
+                        </p>
+                        <p class="control-status">Coming Soon</p>
+                    </div>
+                    
+                    <div class="control-card">
+                        <div class="control-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <h2 class="control-title">Loot Generator</h2>
+                        <p class="control-description">
+                            Generate treasure, magical items, and rewards for your players.
+                        </p>
+                        <p class="control-status">Coming Soon</p>
+                    </div>
+                    
+                    <div class="control-card">
+                        <div class="control-icon">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <h2 class="control-title">Ambient Music</h2>
+                        <p class="control-description">
+                            Set the perfect atmosphere with tavern songs, battle music, and mystical soundscapes.
+                        </p>
+                        <a href="ambient_music_plugin.html" style="
+                            display: inline-block;
+                            margin-top: 15px;
+                            padding: 8px 20px;
+                            background: linear-gradient(135deg, #8b4513, #d2691e);
+                            color: white;
+                            text-decoration: none;
+                            border-radius: 5px;
+                            font-size: 0.9rem;
+                            transition: all 0.3s;
+                        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(139, 69, 19, 0.3)'" 
+                           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                            <i class="fas fa-plug"></i> Plug In
+                        </a>
+                    </div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <a href="dashboard.html" class="back-button">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2025 LuesHub D&D. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#privacy">Privacy</a>
+                    <a href="#terms">Terms</a>
+                    <a href="#contact">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // Theme toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is actually a Dungeon Master
+            fetch('api/session_check.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.logged_in) {
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    
+                    if (data.role !== 'dungeon_master') {
+                        // Redirect non-DMs to dashboard
+                        window.location.href = 'dashboard.html';
+                        return;
+                    }
+                    
+                    document.getElementById('username').textContent = data.username + ' (DM)';
+                });
+            
+            const themeToggle = document.getElementById('theme-toggle');
+            const htmlElement = document.documentElement;
+            
+            themeToggle.addEventListener('click', function() {
+                if (htmlElement.getAttribute('data-theme') === 'light') {
+                    htmlElement.setAttribute('data-theme', 'dark');
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    htmlElement.setAttribute('data-theme', 'light');
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+            
+            // Check saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                htmlElement.setAttribute('data-theme', savedTheme);
+                if (savedTheme === 'dark') {
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
