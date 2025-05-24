@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LuesHub D&D Character Sheet">
+    <meta name="theme-color" content="#7b2cbf">
+    <title>Character Sheet - LuesHub D&D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=MedievalSharp&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="character.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Top Navigation Bar -->
+        <nav class="navbar">
+            <div class="navbar-logo">
+                <a href="dashboard.html">
+                    <h1>LuesHub D&D</h1>
+                </a>
+            </div>
+            
+            <div class="navbar-menu">
+                <a href="dashboard.html" class="navbar-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="characters.html" class="navbar-item">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Characters</span>
+                </a>
+                <a href="campaigns.html" class="navbar-item">
+                    <i class="fas fa-book-open"></i>
+                    <span>Campaigns</span>
+                </a>
+                <a href="dice_roller.html" class="navbar-item">
+                    <i class="fas fa-dice-d20"></i>
+                    <span>Dice Roller</span>
+                </a>
+            </div>
+            
+            <div class="navbar-end">
+                <div class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-sun"></i>
+                </div>
+                <div class="user-menu">
+                    <span id="username">Adventurer</span>
+                    <div class="user-menu-dropdown">
+                        <a href="profile.html">Profile</a>
+                        <a href="settings.html">Settings</a>
+                        <a href="logout.php">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Character Sheet Container -->
+        <div class="character-container">
+            <!-- Left Sidebar -->
+            <aside class="character-sidebar" id="leftSidebar">
+                <div class="sidebar-toggle" id="leftToggle">
+                    <i class="fas fa-chevron-left"></i>
+                </div>
+                
+                <div class="sidebar-content">
+                    <h2 class="sidebar-title">Notes</h2>
+                    <div class="notes-container" id="notesContainer">
+                        <div class="notes-toolbar">
+                            <div class="notes-search-container">
+                                <input type="text" id="notesSearch" class="form-input" placeholder="Search notes...">
+                                <i class="fas fa-search notes-search-icon"></i>
+                            </div>
+                            <div class="notes-actions">
+                                <button id="addNoteBtn" class="btn-primary btn-sm">
+                                    <i class="fas fa-plus"></i> New Note
+                                </button>
+                                <button id="addCategoryBtn" class="btn-secondary btn-sm">
+                                    <i class="fas fa-folder-plus"></i> New Section
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="notes-filter-bar">
+                            <div class="filter-option active" data-filter="all">All Notes</div>
+                            <div class="filter-option" data-filter="recent">Recent</div>
+                            <div class="filter-option" data-filter="important">Important</div>
+                            <div class="filter-indicator"></div>
+                        </div>
+                        
+                        <div class="note-categories" id="noteCategories">
+                            <!-- Note categories will be added here dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            
+            <!-- Main Character Content -->
+            <main class="character-content">
+                <!-- Top actions bar -->
+                <div class="action-toolbar">
+                    <div class="action-group">
+                        <button id="shortRestBtn" class="btn-secondary">
+                            <i class="fas fa-coffee"></i> Short Rest
+                        </button>
+                        <button id="longRestBtn" class="btn-primary">
+                            <i class="fas fa-bed"></i> Long Rest
+                        </button>
+                    </div>
+                    
+                    <div class="action-group currency-group">
+                        <div class="currency-item">
+                            <i class="fas fa-coins gold"></i>
+                            <input type="number" id="gold" class="currency-input" value="0">
+                        </div>
+                        <div class="currency-item">
+                            <i class="fas fa-coins silver"></i>
+                            <input type="number" id="silver" class="currency-input" value="0">
+                        </div>
+                        <div class="currency-item">
+                            <i class="fas fa-coins copper"></i>
+                            <input type="number" id="copper" class="currency-input" value="0">
+                        </div>
+                    </div>
+                    
+                    <div class="action-group">
+                        <button id="saveCharacterBtn" class="btn-success">
+                            <i class="fas fa-save"></i> Save Character
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Enhanced Character Header -->
+                <section class="character-header">
+                    <div class="character-header-primary">
+                        <div class="character-portrait">
+                            <div class="portrait-container" id="portraitContainer">
+                                <i class="fas fa-user-circle portrait-placeholder"></i>
+                                <div class="portrait-overlay">
+                                    <button class="portrait-upload-btn" id="portraitUploadBtn">
+                                        <i class="fas fa-camera"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="character-identity">
+                            <div class="character-name-container">
+                                <input type="text" id="charName" class="character-name-input" placeholder="Character Name">
+                                <div class="name-decoration"></div>
+                            </div>
+                            <div class="character-details-grid">
+                                <div class="character-detail">
+                                    <label for="charRace">Race</label>
+                                    <input type="text" id="charRace" class="form-input">
+                                </div>
+                                <div class="character-detail">
+                                    <label for="charClass">Class</label>
+                                    <input type="text" id="charClass" class="form-input">
+                                </div>
+                                <div class="character-detail">
+                                    <label for="charLevel">Level</label>
+                                    <div class="level-control">
+                                        <button class="level-btn level-down" id="levelDownBtn">-</button>
+                                        <input type="number" id="charLevel" class="form-input level-input" min="1" max="20">
+                                        <button class="level-btn level-up" id="levelUpBtn">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="character-header-secondary">
+                        <div class="character-stats-grid">
+                            <!-- Armor Class -->
+                            <div class="character-stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div class="stat-value">
+                                    <input type="number" id="charAC" class="stat-input" min="0">
+                                </div>
+                                <label class="stat-label">Armor Class</label>
+                            </div>
+                            
+                            <!-- Initiative -->
+                            <div class="character-stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <div class="stat-value">
+                                    <input type="number" id="charInitiative" class="stat-input" value="0">
+                                </div>
+                                <label class="stat-label">Initiative</label>
+                            </div>
+                            
+                            <!-- Speed -->
+                            <div class="character-stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-running"></i>
+                                </div>
+                                <div class="stat-value">
+                                    <input type="number" id="charSpeed" class="stat-input" value="30">
+                                </div>
+                                <label class="stat-label">Speed</label>
+                            </div>
+                            
+                            <!-- Proficiency -->
+                            <div class="character-stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="stat-value">
+                                    <span id="proficiencyBonus">+2</span>
+                                </div>
+                                <label class="stat-label">Proficiency</label>
+                            </div>
+                            
+                            <!-- Passive Perception -->
+                            <div class="character-stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                <div class="stat-value">
+                                    <span id="passivePerception">10</span>
+                                </div>
+                                <label class="stat-label">Passive Perc.</label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Enhanced HP Section -->
+                <section class="hp-section">
+                    <div class="hp-container">
+                        <div class="hp-display">
+                            <div class="hp-shield">
+                                <div class="current-hp" id="currentHpDisplay">14</div>
+                                <div class="max-hp" id="maxHpDisplay">/ 20</div>
+                                <div class="temp-hp" id="tempHpDisplay">+5</div>
+                            </div>
+                        </div>
+                        
+                        <div class="hp-controls">
+                            <div class="hp-control-group">
+                                <label>Current HP</label>
+                                <div class="hp-input-with-buttons">
+                                    <button class="hp-btn hp-decrease" id="hpDecreaseBtn">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <input type="number" id="currentHP" class="form-input hp-input">
+                                    <button class="hp-btn hp-increase" id="hpIncreaseBtn">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="hp-control-group">
+                                <label>Max HP</label>
+                                <div class="hp-input-with-buttons">
+                                    <button class="hp-btn hp-decrease" id="maxHpDecreaseBtn">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <input type="number" id="maxHP" class="form-input hp-input">
+                                    <button class="hp-btn hp-increase" id="maxHpIncreaseBtn">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="hp-control-group">
+                                <label>Temp HP</label>
+                                <div class="hp-input-with-buttons">
+                                    <button class="hp-btn hp-decrease" id="tempHpDecreaseBtn">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <input type="number" id="tempHP" class="form-input hp-input">
+                                    <button class="hp-btn hp-increase" id="tempHpIncreaseBtn">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="hp-bar-container">
+                            <div class="hp-bar-background"></div>
+                            <div class="hp-bar-fill" id="hpBarFill"></div>
+                            <div class="hp-bar-temp" id="tempHPBar"></div>
+                            <div class="hp-bar-text">
+                                <span id="hpText">0 / 0</span>
+                            </div>
+                        </div>
+                        
+                        <div class="hit-dice-container">
+                            <label>Hit Dice</label>
+                            <div class="hit-dice-display">
+                                <span id="currentHitDice">5</span>
+                                <span>/</span>
+                                <span id="maxHitDice">5</span>
+                                <span id="hitDiceType">d8</span>
+                            </div>
+                            <div class="hit-dice-controls">
+                                <button class="hit-dice-btn" id="useHitDiceBtn">
+                                    <i class="fas fa-medkit"></i> Use
+                                </button>
+                                <button class="hit-dice-btn" id="restoreHitDiceBtn">
+                                    <i class="fas fa-redo"></i> Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Abilities Grid -->
+                <section class="abilities-section">
+                    <h2 class="section-title">Abilities</h2>
+                    <div class="abilities-grid">
+                        <div class="ability-card">
+                            <h3 class="ability-name">Strength</h3>
+                            <input type="number" id="strength" class="ability-input">
+                            <div class="ability-modifier" id="strMod">+0</div>
+                        </div>
+                        <div class="ability-card">
+                            <h3 class="ability-name">Dexterity</h3>
+                            <input type="number" id="dexterity" class="ability-input">
+                            <div class="ability-modifier" id="dexMod">+0</div>
+                        </div>
+                        <div class="ability-card">
+                            <h3 class="ability-name">Constitution</h3>
+                            <input type="number" id="constitution" class="ability-input">
+                            <div class="ability-modifier" id="conMod">+0</div>
+                        </div>
+                        <div class="ability-card">
+                            <h3 class="ability-name">Intelligence</h3>
+                            <input type="number" id="intelligence" class="ability-input">
+                            <div class="ability-modifier" id="intMod">+0</div>
+                        </div>
+                        <div class="ability-card">
+                            <h3 class="ability-name">Wisdom</h3>
+                            <input type="number" id="wisdom" class="ability-input">
+                            <div class="ability-modifier" id="wisMod">+0</div>
+                        </div>
+                        <div class="ability-card">
+                            <h3 class="ability-name">Charisma</h3>
+                            <input type="number" id="charisma" class="ability-input">
+                            <div class="ability-modifier" id="chaMod">+0</div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Tabbed Sections -->
+                <section class="tabbed-sections">
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="spells">Spells</button>
+                        <button class="tab-btn" data-tab="equipment">Equipment</button>
+                        <button class="tab-btn" data-tab="background">Background</button>
+                        <button class="tab-btn" data-tab="skills">Skills</button>
+                    </div>
+                    
+                    <!-- Spells Tab -->
+                    <div class="tab-content active" id="spellsTab">
+                        <div class="spells-header">
+                            <div class="spell-stats">
+                                <div class="spell-stat-item">
+                                    <label for="spellDC">Spell Save DC</label>
+                                    <input type="number" id="spellDC" class="form-input">
+                                </div>
+                                <div class="spell-stat-item">
+                                    <label for="spellAttack">Spell Attack Bonus</label>
+                                    <input type="number" id="spellAttack" class="form-input">
+                                </div>
+                                <div class="spell-stat-item">
+                                    <label for="spellcastingAbility">Spellcasting Ability</label>
+                                    <select id="spellcastingAbility" class="form-select">
+                                        <option value="intelligence">Intelligence</option>
+                                        <option value="wisdom">Wisdom</option>
+                                        <option value="charisma">Charisma</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="spell-actions">
+                                <button id="addSpellBtn" class="btn-primary">
+                                    <i class="fas fa-plus"></i> Add Spell
+                                </button>
+                                <button id="configSpellsBtn" class="btn-secondary">
+                                    <i class="fas fa-cog"></i> Configure Slots
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="spell-slots-container">
+                            <h3 class="spell-section-title">Spell Slots</h3>
+                            <div class="spell-slots" id="spellSlots">
+                                <!-- Spell slots will be rendered here -->
+                            </div>
+                        </div>
+                        
+                        <div class="spell-management">
+                            <div class="spell-filters">
+                                <div class="spell-filter-group">
+                                    <label for="spellLevelFilter">Level</label>
+                                    <select id="spellLevelFilter" class="form-select">
+                                        <option value="all">All Levels</option>
+                                        <option value="cantrip">Cantrips</option>
+                                        <option value="1">Level 1</option>
+                                        <option value="2">Level 2</option>
+                                        <option value="3">Level 3</option>
+                                        <option value="4">Level 4</option>
+                                        <option value="5">Level 5</option>
+                                        <option value="6">Level 6</option>
+                                        <option value="7">Level 7</option>
+                                        <option value="8">Level 8</option>
+                                        <option value="9">Level 9</option>
+                                    </select>
+                                </div>
+                                <div class="spell-filter-group">
+                                    <label for="spellSchoolFilter">School</label>
+                                    <select id="spellSchoolFilter" class="form-select">
+                                        <option value="all">All Schools</option>
+                                        <option value="abjuration">Abjuration</option>
+                                        <option value="conjuration">Conjuration</option>
+                                        <option value="divination">Divination</option>
+                                        <option value="enchantment">Enchantment</option>
+                                        <option value="evocation">Evocation</option>
+                                        <option value="illusion">Illusion</option>
+                                        <option value="necromancy">Necromancy</option>
+                                        <option value="transmutation">Transmutation</option>
+                                    </select>
+                                </div>
+                                <div class="spell-filter-group">
+                                    <label for="spellSearchInput">Search</label>
+                                    <div class="search-input-container">
+                                        <input type="text" id="spellSearchInput" class="form-input" placeholder="Search spells...">
+                                        <i class="fas fa-search search-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="spell-list-container">
+                                <h3 class="spell-section-title">Known Spells</h3>
+                                <div class="spell-list" id="spellList">
+                                    <!-- Spell cards will be rendered here -->
+                                </div>
+                                <div class="empty-spell-list" id="emptySpellList">
+                                    <i class="fas fa-book-open empty-icon"></i>
+                                    <p>No spells added yet. Click "Add Spell" to get started!</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Legacy support for old data format -->
+                        <input type="hidden" id="knownSpells">
+                    </div>
+                    
+                    <!-- Equipment Tab -->
+                    <div class="tab-content" id="equipmentTab">
+                        <div class="equipment-grid">
+                            <div class="equipment-column">
+                                <h3>Weapons</h3>
+                                <textarea id="weapons" class="form-textarea" placeholder="List your weapons here..."></textarea>
+                            </div>
+                            <div class="equipment-column">
+                                <h3>Gear</h3>
+                                <textarea id="gear" class="form-textarea" placeholder="List your gear here..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Background Tab -->
+                    <div class="tab-content" id="backgroundTab">
+                        <textarea id="background" class="form-textarea" placeholder="Write your character's background here..."></textarea>
+                    </div>
+                    
+                    <!-- Skills Tab -->
+                    <div class="tab-content" id="skillsTab">
+                        <div class="skills-grid">
+                            <!-- Strength Skills -->
+                            <div class="skill-category">
+                                <h3 class="skill-category-title">Strength</h3>
+                                <div class="skill-list">
+                                    <div class="skill-item" data-ability="strength" data-skill="Athletics">
+                                        <span class="skill-name">Athletics</span>
+                                        <span class="skill-mod">+0</span>
+                                        <button class="roll-skill-btn"><i class="fas fa-dice-d20"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Dexterity Skills -->
+                            <div class="skill-category">
+                                <h3 class="skill-category-title">Dexterity</h3>
+                                <div class="skill-list">
+                                    <div class="skill-item" data-ability="dexterity" data-skill="Acrobatics">
+                                        <span class="skill-name">Acrobatics</span>
+                                        <span class="skill-mod">+0</span>
+                                        <button class="roll-skill-btn"><i class="fas fa-dice-d20"></i></button>
+                                    </div>
+                                    <div class="skill-item" data-ability="dexterity" data-skill="Sleight of Hand">
+                                        <span class="skill-name">Sleight of Hand</span>
+                                        <span class="skill-mod">+0</span>
+                                        <button class="roll-skill-btn"><i class="fas fa-dice-d20"></i></button>
+                                    </div>
+                                    <div class="skill-item" data-ability="dexterity" data-skill="Stealth">
+                                        <span class="skill-name">Stealth</span>
+                                        <span class="skill-mod">+0</span>
+                                        <button class="roll-skill-btn"><i class="fas fa-dice-d20"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Intelligence Skills -->
+                            <div class="skill-category">
+                                <h3 class="skill-category-title">Intelligence</h3>
+                                <div class="skill-list">
+                                    <div class="skill-item" data-ability="intelligence" data-skill="Arcana">
+                                        <span class="skill-name">Arcana</span>
+                                        <span class="skill-mod">+0</span>
+                                        <button class="roll-skill-btn"><i class="fas fa-dice-d20"></i></button>
+                                    </div>
+                                    <div class="skill-item" data-ability="intelligence" data-skill="History">
+                                        <span class="skill-name">History</span>
+                                        <span class="skill-mod">+0</span>
+                                        <button class="roll-skill-btn"><i class="fas fa-dice-d20"></i></button>
+                                    </div>
+                                    <div class="skill-item" data-ability="intelligence" data-skill="Investigation">
+                                        <span class="skill-name">Investigation</span>
+                                        <span class="skill-mod">+0</span>
+                                        <button class="roll-skill-btn"><i class="fas fa-dice-d20"></i></button>
+                                    </div>
+                                    <div class="skill-item" data-ability="intelligence" data-skill="Nature">
+                                        <span class="skill-name">Nature</span>
+                                        <span class="skill-mod">+0</span>
+                                        <button class="roll-skill-btn"><i class="fas fa-dice-d20"></i></button>
+                                    </div>
+                                    <div class="skill-item" data-ability="intelligence" data-skill="Religion">
+                                        <span class="skill-name">Religion</span>
+                                        <span class="skill-mod">+0</span>
+                                        <button class="roll-skill-btn"><i class="fas fa-dice-d20"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Wisdom Skills -->
+                            <div class="skill-category">
+                                <h3 class="skill-category-title">Wisdom</h3>
+                                <div class="skill-list">
+                                    <div class="skill-item" data-ability="wisdom" data-skill="Animal Handling">
+                                        <span class="skill-name">Animal Handling</span>
+                                        <span class="skill-mod">+0</span>
+                                        <button class="roll-skill-btn"><i class="fas fa-dice-d20"></i></button>
+                                    </div>
+                                    <div class="skill-item" data-ability="wisdom" data-skill="Insight">
+                                        <span class="skill-name">Insight</span>
+                                        <span class="skill-mod">+0</span>
+                                        <button class="roll-skill-btn"><i class="fas fa-dice-d20"></i></button>
+                                    </div>
+                                    <div class="skill-item" data-ability="wisdom" data-skill="Medicine">
+                                        <span class="skill-name">Medicine</span>
+                                        <span class="skill-mod">+0</span>
+                                        <button class="roll-skill-btn"><i class="fas fa-dice-d20"></i></button>
+                                    </div>
+                                    <div class="skill-item" data-ability="wisdom" data-skill="Perception">
+                                        <span class="skill-name">Perception</span>
+                                        <span class="skill-mod">+0</span>
+                                        <button class="roll-skill-btn"><i class="fas fa-dice-d20"></i></button>
+                                    </div>
+                                    <div class="skill-item" data-ability="wisdom" data-skill="Survival">
+                                        <span class="skill-name">Survival</span>
+                                        <span class="skill-mod">+0</span>
+                                        <button class="roll-skill-btn"><i class="fas fa-dice-d20"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Charisma Skills -->
+                            <div class="skill-category">
+                                <h3 class="skill-category-title">Charisma</h3>
+                                <div class="skill-list">
+                                    <div class="skill-item" data-ability="charisma" data-skill="Deception">
+                                        <span class="skill-name">Deception</span>
+                                        <span class="skill-mod">+0</span>
+                                        <button class="roll-skill-btn"><i class="fas fa-dice-d20"></i></button>
+                                    </div>
+                                    <div class="skill-item" data-ability="charisma" data-skill="Intimidation">
+                                        <span class="skill-name">Intimidation</span>
+                                        <span class="skill-mod">+0</span>
+                                        <button class="roll-skill-btn"><i class="fas fa-dice-d20"></i></button>
+                                    </div>
+                                    <div class="skill-item" data-ability="charisma" data-skill="Performance">
+                                        <span class="skill-name">Performance</span>
+                                        <span class="skill-mod">+0</span>
+                                        <button class="roll-skill-btn"><i class="fas fa-dice-d20"></i></button>
+                                    </div>
+                                    <div class="skill-item" data-ability="charisma" data-skill="Persuasion">
+                                        <span class="skill-name">Persuasion</span>
+                                        <span class="skill-mod">+0</span>
+                                        <button class="roll-skill-btn"><i class="fas fa-dice-d20"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+            
+            <!-- Right Sidebar - Dice Roller -->
+            <aside class="character-sidebar" id="rightSidebar">
+                <div class="sidebar-toggle" id="rightToggle">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                
+                <div class="sidebar-content">
+                    <h2 class="sidebar-title">Dice Roller</h2>
+                    
+                    <div class="dice-container">
+                        <div class="dice-controls">
+                            <div class="dice-control-group">
+                                <label>Number of Dice</label>
+                                <select id="numDice" class="dice-select">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </div>
+                            
+                            <div class="dice-control-group">
+                                <label>Dice Type</label>
+                                <select id="diceType" class="dice-select">
+                                    <option value="d4">d4</option>
+                                    <option value="d6">d6</option>
+                                    <option value="d8">d8</option>
+                                    <option value="d10">d10</option>
+                                    <option value="d12">d12</option>
+                                    <option value="d20" selected>d20</option>
+                                    <option value="d100">d100</option>
+                                </select>
+                            </div>
+                            
+                            <div class="dice-control-group">
+                                <label>Modifier</label>
+                                <select id="diceModifier" class="dice-select">
+                                    <option value="-5">-5</option>
+                                    <option value="-4">-4</option>
+                                    <option value="-3">-3</option>
+                                    <option value="-2">-2</option>
+                                    <option value="-1">-1</option>
+                                    <option value="0" selected>+0</option>
+                                    <option value="1">+1</option>
+                                    <option value="2">+2</option>
+                                    <option value="3">+3</option>
+                                    <option value="4">+4</option>
+                                    <option value="5">+5</option>
+                                    <option value="6">+6</option>
+                                    <option value="7">+7</option>
+                                    <option value="8">+8</option>
+                                    <option value="9">+9</option>
+                                    <option value="10">+10</option>
+                                </select>
+                            </div>
+                            
+                            <div class="dice-control-group">
+                                <label>Description</label>
+                                <input type="text" id="rollDescription" class="dice-input" placeholder="Attack Roll">
+                            </div>
+                            
+                            <button id="rollDiceBtn" class="btn-primary btn-full">
+                                <i class="fas fa-dice"></i> Roll Dice
+                            </button>
+                        </div>
+                        
+                        <div class="dice-history">
+                            <h3>Recent Rolls</h3>
+                            <div id="rollHistory" class="roll-history-list">
+                                <!-- Roll history will be added here dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2025 LuesHub D&D. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#privacy">Privacy</a>
+                    <a href="#terms">Terms</a>
+                    <a href="#contact">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Modals -->
+    <!-- Note Editor Modal with Rich Text Capabilities -->
+    <div class="modal" id="noteEditorModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Note</h2>
+                <button class="modal-close" id="closeNoteEditorBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="note-title-input-container">
+                    <label for="noteEditorTitle">Title</label>
+                    <input type="text" id="noteEditorTitle" class="form-input" placeholder="Note Title">
+                </div>
+                <div class="rich-text-toolbar" id="richTextToolbar">
+                    <div class="toolbar-group">
+                        <button class="toolbar-btn" data-command="bold" title="Bold">
+                            <i class="fas fa-bold"></i>
+                        </button>
+                        <button class="toolbar-btn" data-command="italic" title="Italic">
+                            <i class="fas fa-italic"></i>
+                        </button>
+                        <button class="toolbar-btn" data-command="underline" title="Underline">
+                            <i class="fas fa-underline"></i>
+                        </button>
+                        <button class="toolbar-btn" data-command="strikeThrough" title="Strike Through">
+                            <i class="fas fa-strikethrough"></i>
+                        </button>
+                    </div>
+                    <div class="toolbar-group">
+                        <button class="toolbar-btn" data-command="justifyLeft" title="Align Left">
+                            <i class="fas fa-align-left"></i>
+                        </button>
+                        <button class="toolbar-btn" data-command="justifyCenter" title="Align Center">
+                            <i class="fas fa-align-center"></i>
+                        </button>
+                        <button class="toolbar-btn" data-command="justifyRight" title="Align Right">
+                            <i class="fas fa-align-right"></i>
+                        </button>
+                    </div>
+                    <div class="toolbar-group">
+                        <button class="toolbar-btn" data-command="insertUnorderedList" title="Bullet List">
+                            <i class="fas fa-list-ul"></i>
+                        </button>
+                        <button class="toolbar-btn" data-command="insertOrderedList" title="Numbered List">
+                            <i class="fas fa-list-ol"></i>
+                        </button>
+                    </div>
+                    <div class="toolbar-group">
+                        <button class="toolbar-btn" data-command="createLink" title="Insert Link">
+                            <i class="fas fa-link"></i>
+                        </button>
+                        <button class="toolbar-btn" data-command="unlink" title="Remove Link">
+                            <i class="fas fa-unlink"></i>
+                        </button>
+                    </div>
+                    <div class="toolbar-group">
+                        <select class="formatting-select" id="headingSelect">
+                            <option value="">Paragraph</option>
+                            <option value="h1">Heading 1</option>
+                            <option value="h2">Heading 2</option>
+                            <option value="h3">Heading 3</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="noteEditorContent" class="rich-text-editor" contenteditable="true"></div>
+                <div class="note-tags-container">
+                    <label for="noteTags">Tags (comma separated)</label>
+                    <input type="text" id="noteTags" class="form-input" placeholder="e.g. important, quest, npc">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelNoteBtn">Cancel</button>
+                <button class="btn-primary" id="saveNoteBtn">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Spell Slots Modal -->
+    <div class="modal" id="spellSlotsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Configure Spell Slots</h2>
+                <button class="modal-close" id="closeSpellSlotsBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="spell-slot-editor" id="spellSlotEditor">
+                    <!-- Spell slots will be rendered here -->
+                </div>
+                <button id="addSpellLevelBtn" class="btn-primary">
+                    <i class="fas fa-plus"></i> Add Spell Level
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelSpellSlotsBtn">Cancel</button>
+                <button class="btn-primary" id="saveSpellSlotsBtn">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Roll Result Modal -->
+    <div class="roll-result-modal" id="rollResultModal">
+        <div class="roll-result-content">
+            <div class="roll-result-header">
+                <h2 id="rollResultTitle">Attack Roll</h2>
+            </div>
+            <div class="roll-result-body">
+                <div class="roll-result-value" id="rollResultValue">20</div>
+                <div class="roll-result-formula" id="rollResultFormula">1d20 + 5</div>
+                <div class="roll-result-details" id="rollResultDetails">[15] + 5</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Spell Editor Modal -->
+    <div class="modal" id="spellEditorModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="spellEditorTitle">Add New Spell</h2>
+                <button class="modal-close" id="closeSpellEditorBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="spell-form">
+                    <div class="spell-form-group">
+                        <label for="spellName">Spell Name *</label>
+                        <input type="text" id="spellName" class="form-input" required placeholder="e.g. Fireball, Magic Missile">
+                    </div>
+                    
+                    <div class="spell-form-row">
+                        <div class="spell-form-group">
+                            <label for="spellLevel">Level *</label>
+                            <select id="spellLevel" class="form-select" required>
+                                <option value="cantrip">Cantrip</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                            </select>
+                        </div>
+                        
+                        <div class="spell-form-group">
+                            <label for="spellSchool">School *</label>
+                            <select id="spellSchool" class="form-select" required>
+                                <option value="abjuration">Abjuration</option>
+                                <option value="conjuration">Conjuration</option>
+                                <option value="divination">Divination</option>
+                                <option value="enchantment">Enchantment</option>
+                                <option value="evocation">Evocation</option>
+                                <option value="illusion">Illusion</option>
+                                <option value="necromancy">Necromancy</option>
+                                <option value="transmutation">Transmutation</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="spell-form-row">
+                        <div class="spell-form-group">
+                            <label for="spellCastingTime">Casting Time *</label>
+                            <input type="text" id="spellCastingTime" class="form-input" required placeholder="e.g. 1 action, 1 minute">
+                        </div>
+                        
+                        <div class="spell-form-group">
+                            <label for="spellRange">Range *</label>
+                            <input type="text" id="spellRange" class="form-input" required placeholder="e.g. 60 feet, Touch, Self">
+                        </div>
+                    </div>
+                    
+                    <div class="spell-form-row">
+                        <div class="spell-form-group">
+                            <label for="spellDuration">Duration *</label>
+                            <input type="text" id="spellDuration" class="form-input" required placeholder="e.g. Instantaneous, 1 minute, 1 hour">
+                        </div>
+                        
+                        <div class="spell-form-group">
+                            <label for="spellComponents">Components *</label>
+                            <input type="text" id="spellComponents" class="form-input" required placeholder="e.g. V, S, M (gem worth 50gp)">
+                        </div>
+                    </div>
+                    
+                    <div class="spell-form-group">
+                        <label for="spellDescription">Description *</label>
+                        <textarea id="spellDescription" class="form-textarea" rows="5" required placeholder="Describe the effects of the spell..."></textarea>
+                    </div>
+                    
+                    <div class="spell-form-group">
+                        <label for="spellHigherLevels">At Higher Levels</label>
+                        <textarea id="spellHigherLevels" class="form-textarea" rows="2" placeholder="Describe any additional effects when cast at higher levels..."></textarea>
+                    </div>
+                    
+                    <div class="spell-form-checkboxes">
+                        <div class="spell-checkbox-group">
+                            <input type="checkbox" id="spellRitual" class="form-checkbox">
+                            <label for="spellRitual">Ritual</label>
+                        </div>
+                        
+                        <div class="spell-checkbox-group">
+                            <input type="checkbox" id="spellConcentration" class="form-checkbox">
+                            <label for="spellConcentration">Concentration</label>
+                        </div>
+                        
+                        <div class="spell-checkbox-group">
+                            <input type="checkbox" id="spellPrepared" class="form-checkbox">
+                            <label for="spellPrepared">Prepared</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelSpellBtn">Cancel</button>
+                <button class="btn-primary" id="saveSpellBtn">Save Spell</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <i class="fas fa-check-circle toast-icon"></i>
+            <div class="toast-message" id="toastMessage">Character saved successfully!</div>
+        </div>
+    </div>
+    
+    <script src="character-fixed.js"></script>
+    <script src="character_data_fix.js"></script>
+    <script src="comprehensive_fix.js"></script>
+    <script src="clean_spell_display.js"></script>
+    <script src="spell_save_diagnostics.js"></script>
+</body>
+</html>

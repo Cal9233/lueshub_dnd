@@ -1,0 +1,41 @@
+# Basic .htaccess for D&D site
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  
+  # Redirect to login if accessing dashboard without login
+  RewriteCond %{REQUEST_URI} ^/dashboard\.html$ [NC]
+  RewriteCond %{HTTP_COOKIE} !PHPSESSID
+  RewriteRule ^(.*)$ /login.html [R=302,L]
+</IfModule>
+
+# Security headers
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Cache control
+<IfModule mod_headers.c>
+  # Cache images, CSS, JS for 1 week
+  <FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
+    Header set Cache-Control "max-age=604800, public"
+  </FilesMatch>
+  
+  # Don't cache HTML and PHP
+  <FilesMatch "\.(html|php)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+  </FilesMatch>
+</IfModule>
+
+# Prevent directory listing
+Options -Indexes
+
+# Protect sensitive files
+<FilesMatch "^\.">
+  Order allow,deny
+  Deny from all
+</FilesMatch>

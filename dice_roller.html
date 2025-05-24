@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LuesHub D&D 3D Dice Roller">
+    <meta name="theme-color" content="#7b2cbf">
+    <title>3D Dice Roller - LuesHub Dungeons & Dragons</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=MedievalSharp&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="dice_roller.css">
+    <!-- 3D libraries for isometric view -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+</head>
+<body>
+    <div class="app">
+        <!-- Top Navigation Bar -->
+        <nav class="navbar">
+            <div class="navbar-logo">
+                <a href="dashboard.html">
+                    <h1>LuesHub D&D</h1>
+                </a>
+            </div>
+            
+            <div class="navbar-menu">
+                <a href="dashboard.html" class="navbar-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="characters.html" class="navbar-item">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Characters</span>
+                </a>
+                <a href="campaigns.html" class="navbar-item">
+                    <i class="fas fa-book-open"></i>
+                    <span>Campaigns</span>
+                </a>
+                <a href="dice_roller.html" class="navbar-item active">
+                    <i class="fas fa-dice-d20"></i>
+                    <span>Dice Roller</span>
+                </a>
+            </div>
+            
+            <div class="navbar-end">
+                <div class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-sun"></i>
+                </div>
+                <div class="user-menu">
+                    <span id="username">Adventurer</span>
+                    <div class="user-menu-dropdown">
+                        <a href="profile.html">Profile</a>
+                        <a href="settings.html">Settings</a>
+                        <a href="logout.php">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="dashboard-header">
+                <h2>Virtual Dice Table</h2>
+                <p>Select and roll 3D dice with realistic physics</p>
+            </div>
+            
+            <div class="dice-container">
+                <div class="dice-options">
+                    <div class="dice-selector">
+                        <h3>Select Dice</h3>
+                        <div class="dice-grid">
+                            <div class="dice-item" data-dice="d4">
+                                <i class="fas fa-dice-d4"></i>
+                                <span>D4</span>
+                            </div>
+                            <div class="dice-item" data-dice="d6">
+                                <i class="fas fa-dice-d6"></i>
+                                <span>D6</span>
+                            </div>
+                            <div class="dice-item" data-dice="d8">
+                                <i class="fas fa-dice-one"></i>
+                                <span>D8</span>
+                            </div>
+                            <div class="dice-item" data-dice="d10">
+                                <i class="fas fa-dice-two"></i>
+                                <span>D10</span>
+                            </div>
+                            <div class="dice-item" data-dice="d12">
+                                <i class="fas fa-dice-three"></i>
+                                <span>D12</span>
+                            </div>
+                            <div class="dice-item" data-dice="d20">
+                                <i class="fas fa-dice-d20"></i>
+                                <span>D20</span>
+                            </div>
+                            <div class="dice-item" data-dice="d100">
+                                <i class="fas fa-dice-five"></i>
+                                <span>D100</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="view-toggle">
+                        <h3>View Mode</h3>
+                        <div class="toggle-buttons">
+                            <button id="toggle-2d" class="toggle-button active">2D View</button>
+                            <button id="toggle-3d" class="toggle-button">3D View</button>
+                        </div>
+                    </div>
+                    
+                    <div class="dice-actions">
+                        <div class="dice-amount">
+                            <label for="dice-count">Number of Dice:</label>
+                            <div class="dice-counter">
+                                <button id="decrease-dice" class="dice-btn">-</button>
+                                <input type="number" id="dice-count" value="1" min="1" max="10">
+                                <button id="increase-dice" class="dice-btn">+</button>
+                            </div>
+                        </div>
+                        
+                        <div class="dice-modifier">
+                            <label for="dice-modifier">Modifier:</label>
+                            <div class="dice-counter">
+                                <button id="decrease-mod" class="dice-btn">-</button>
+                                <input type="number" id="dice-modifier" value="0" min="-20" max="20">
+                                <button id="increase-mod" class="dice-btn">+</button>
+                            </div>
+                        </div>
+                        
+                        <button id="roll-dice" class="roll-button">
+                            <i class="fas fa-dice"></i> Roll Dice
+                        </button>
+                        
+                        <button id="clear-dice" class="clear-button">
+                            <i class="fas fa-trash"></i> Clear Table
+                        </button>
+                    </div>
+                    
+                    <div class="roll-history">
+                        <h3>Roll History</h3>
+                        <div id="roll-log"></div>
+                    </div>
+                </div>
+                
+                <div class="dice-table-container">
+                    <div id="dice-canvas-container">
+                        <canvas id="dice-canvas"></canvas>
+                        <div id="loading-overlay" style="display: flex; align-items: center; justify-content: center; flex-direction: column; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 100;">
+                            <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: white; margin-bottom: 1rem;"></i>
+                            <p style="color: white; font-size: 1.2rem;">Loading 3D Dice...</p>
+                        </div>
+                    </div>
+                    <div class="dice-results">
+                        <div id="dice-result" class="result-display">
+                            <span>Roll the dice to see results</span>
+                        </div>
+                        <div id="dice-total" class="total-display">
+                            <span>Total: 0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2025 LuesHub D&D. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#privacy">Privacy</a>
+                    <a href="#terms">Terms</a>
+                    <a href="#contact">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <script src="simple_dice.js"></script>
+    <script src="debug_3d_dice.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme toggle functionality
+            const themeToggle = document.getElementById('theme-toggle');
+            const htmlElement = document.documentElement;
+            
+            themeToggle.addEventListener('click', function() {
+                if (htmlElement.getAttribute('data-theme') === 'light') {
+                    htmlElement.setAttribute('data-theme', 'dark');
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    htmlElement.setAttribute('data-theme', 'light');
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+            
+            // Check saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                htmlElement.setAttribute('data-theme', savedTheme);
+                if (savedTheme === 'dark') {
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                }
+            }
+            
+            // Get user data
+            fetch('api/session_check.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.logged_in) {
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    
+                    // Set username in navbar
+                    document.getElementById('username').textContent = data.username;
+                })
+                .catch(error => {
+                    console.error('Error fetching session data:', error);
+                });
+                
+            // Toggle buttons are now handled directly in debug_3d_dice.js
+        });
+    </script>
+</body>
+</html>
