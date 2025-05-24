@@ -10,7 +10,7 @@ const Footer = ({
 }
 
 Footer.defaultProps = {
-    children: "Hello World"
+    children: "Footer"
 };
 
 export default Footer

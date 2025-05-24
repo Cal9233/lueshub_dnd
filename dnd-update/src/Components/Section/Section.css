@@ -1,0 +1,7 @@
+.section {
+  /* Base section styles - can be extended */
+}
+
+.section--grid {
+  /* Grid-specific styles applied via inline styles for flexibility */
+}
