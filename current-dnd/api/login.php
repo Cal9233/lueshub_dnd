@@ -29,7 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         error_log("Login attempt - Username: $username, Password length: " . strlen($password));
         
         // Query to check if user exists - Use prepared statement to prevent SQL injection
-        $stmt = mysqli_prepare($conn, "SELECT id, username, password FROM users WHERE username = ?");
+        // LOWER() makes the comparison case-insensitive
+        $stmt = mysqli_prepare($conn, "SELECT id, username, password, role FROM users WHERE LOWER(username) = LOWER(?)");
         mysqli_stmt_bind_param($stmt, "s", $username);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
@@ -43,11 +44,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['logged_in'] = true;
+                $_SESSION['role'] = isset($user['role']) ? $user['role'] : 'player';
                 
                 // Update response
                 $response['success'] = true;
                 $response['message'] = 'Login successful';
                 $response['user_id'] = $user['id'];
+                $response['role'] = $_SESSION['role'];
             } else {
                 $response['message'] = 'Invalid username or password';
             }

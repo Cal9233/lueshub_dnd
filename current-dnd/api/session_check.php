@@ -27,13 +27,40 @@ function get_username() {
     return isset($_SESSION['username']) ? $_SESSION['username'] : null;
 }
 
+// Function to get user role
+function get_user_role() {
+    if (isset($_SESSION['role'])) {
+        return $_SESSION['role'];
+    }
+    
+    // If role not in session, fetch from database
+    $user_id = get_user_id();
+    if ($user_id) {
+        require_once 'db.php';
+        $stmt = mysqli_prepare($conn, "SELECT role FROM users WHERE id = ?");
+        mysqli_stmt_bind_param($stmt, "i", $user_id);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        
+        if ($result && $row = mysqli_fetch_assoc($result)) {
+            $_SESSION['role'] = $row['role'];
+            mysqli_stmt_close($stmt);
+            return $row['role'];
+        }
+        mysqli_stmt_close($stmt);
+    }
+    
+    return 'player'; // Default role
+}
+
 // API endpoint for checking login status (when called directly)
 if (basename($_SERVER['PHP_SELF']) === 'session_check.php') {
     header('Content-Type: application/json');
     echo json_encode([
         'logged_in' => is_logged_in(),
         'user_id' => get_user_id(),
-        'username' => get_username()
+        'username' => get_username(),
+        'role' => get_user_role()
     ]);
     exit;
 }
