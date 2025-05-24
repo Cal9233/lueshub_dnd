@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LuesHub D&D Campaigns">
+    <meta name="theme-color" content="#7b2cbf">
+    <title>Campaigns - LuesHub Dungeons & Dragons</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=MedievalSharp&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css?v=20250524010956?v=20250524010956?v=20250524002628?v=20250524001828?v=20250523221304?v=20250523214655?v=20250523214004?v=20250523213330?v=20250523213015">
+    <style>
+        .placeholder-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 40px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+        .placeholder-icon {
+            font-size: 5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        .placeholder-title {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        .placeholder-text {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .back-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Top Navigation Bar -->
+        <nav class="navbar">
+            <div class="navbar-logo">
+                <a href="dashboard.html">
+                    <h1>LuesHub D&D</h1>
+                </a>
+            </div>
+            
+            <div class="navbar-menu">
+                <a href="dashboard.html" class="navbar-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="characters.html" class="navbar-item">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Characters</span>
+                </a>
+                <a href="campaigns.html" class="navbar-item active">
+                    <i class="fas fa-book-open"></i>
+                    <span>Campaigns</span>
+                </a>
+                <a href="dice_roller.html" class="navbar-item">
+                    <i class="fas fa-dice-d20"></i>
+                    <span>Dice Roller</span>
+                </a>
+            </div>
+            
+            <div class="navbar-end">
+                <div class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-sun"></i>
+                </div>
+                <div class="user-menu">
+                    <span id="username">Adventurer</span>
+                    <div class="user-menu-dropdown">
+                        <a href="profile.html">Profile</a>
+                        <a href="settings.html">Settings</a>
+                        <a href="logout.php">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="placeholder-container">
+                <div class="placeholder-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h1 class="placeholder-title">Campaigns Coming Soon!</h1>
+                <p class="placeholder-text">
+                    The campaign management system is currently under development. Soon you'll be able to create, join, and manage your D&D campaigns with your party members!
+                </p>
+                <p class="placeholder-text">
+                    Features in development:
+                    <br>• Create and manage campaigns
+                    <br>• Invite players to your campaigns
+                    <br>• Track campaign progress and notes
+                    <br>• Share resources with party members
+                </p>
+                <a href="dashboard.html" class="back-button">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2025 LuesHub D&D. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#privacy">Privacy</a>
+                    <a href="#terms">Terms</a>
+                    <a href="#contact">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // Theme toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const htmlElement = document.documentElement;
+            
+            themeToggle.addEventListener('click', function() {
+                if (htmlElement.getAttribute('data-theme') === 'light') {
+                    htmlElement.setAttribute('data-theme', 'dark');
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    htmlElement.setAttribute('data-theme', 'light');
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+            
+            // Check saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                htmlElement.setAttribute('data-theme', savedTheme);
+                if (savedTheme === 'dark') {
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                }
+            }
+            
+            // Get user data
+            fetch('api/session_check.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.logged_in) {
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    document.getElementById('username').textContent = data.username;
+                });
+        });
+    </script>
+</body>
+</html>

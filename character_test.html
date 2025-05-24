@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            background-color: #f5f5f5;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+        input {
+            padding: 8px;
+            margin: 5px 0;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Character API Test</h1>
+        
+        <div class="test-section">
+            <h2>Test Character Load</h2>
+            <div>
+                <label for="characterId">Character ID:</label>
+                <input type="number" id="characterId" value="1" min="1">
+            </div>
+            <button id="loadCharacter">Load Character</button>
+            <div id="loadResult" class="result">Results will appear here...</div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Test Character Save</h2>
+            <div>
+                <label for="saveCharacterId">Character ID:</label>
+                <input type="number" id="saveCharacterId" value="1" min="1">
+            </div>
+            <div>
+                <label for="characterName">Name:</label>
+                <input type="text" id="characterName" value="Test Character">
+            </div>
+            <div>
+                <label for="characterRace">Race:</label>
+                <input type="text" id="characterRace" value="Human">
+            </div>
+            <div>
+                <label for="characterClass">Class:</label>
+                <input type="text" id="characterClass" value="Fighter">
+            </div>
+            <div>
+                <label for="characterNotes">Notes:</label>
+                <input type="text" id="characterNotes" value='[{"title":"Test Notes","isOpen":true,"notes":[{"title":"Test Note","content":"This is a test note with \"quotes\" and special chars: $%^&*()"}]}]'>
+            </div>
+            <button id="saveCharacter">Save Character</button>
+            <div id="saveResult" class="result">Results will appear here...</div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load Character Test
+            document.getElementById('loadCharacter').addEventListener('click', async () => {
+                const characterId = document.getElementById('characterId').value;
+                const resultDiv = document.getElementById('loadResult');
+                
+                try {
+                    resultDiv.textContent = 'Loading...';
+                    const response = await fetch(`api/character_safe.php?id=${characterId}`);
+                    const data = await response.json();
+                    
+                    resultDiv.textContent = JSON.stringify(data, null, 2);
+                    
+                    // If successful, populate the save form
+                    if (data.success && data.character) {
+                        document.getElementById('saveCharacterId').value = data.character.id;
+                        document.getElementById('characterName').value = data.character.name || '';
+                        document.getElementById('characterRace').value = data.character.race || '';
+                        document.getElementById('characterClass').value = data.character.class || '';
+                        
+                        // For notes, use the pre-parsed array if available
+                        if (data.character.notes_array) {
+                            document.getElementById('characterNotes').value = JSON.stringify(data.character.notes_array);
+                        } else if (data.character.notes) {
+                            document.getElementById('characterNotes').value = data.character.notes;
+                        }
+                    }
+                } catch (error) {
+                    resultDiv.textContent = `Error: ${error.message}`;
+                }
+            });
+            
+            // Save Character Test
+            document.getElementById('saveCharacter').addEventListener('click', async () => {
+                const characterId = document.getElementById('saveCharacterId').value;
+                const name = document.getElementById('characterName').value;
+                const race = document.getElementById('characterRace').value;
+                const className = document.getElementById('characterClass').value;
+                const notes = document.getElementById('characterNotes').value;
+                const resultDiv = document.getElementById('saveResult');
+                
+                try {
+                    resultDiv.textContent = 'Saving...';
+                    
+                    const formData = new FormData();
+                    formData.append('action', 'save_character');
+                    formData.append('id', characterId);
+                    formData.append('name', name);
+                    formData.append('race', race);
+                    formData.append('class', className);
+                    formData.append('level', 1);
+                    formData.append('notes', notes);
+                    
+                    // Add minimum required fields
+                    formData.append('armor_class', 10);
+                    formData.append('hit_points', 10);
+                    formData.append('max_hit_points', 10);
+                    formData.append('strength', 10);
+                    formData.append('dexterity', 10);
+                    formData.append('constitution', 10);
+                    formData.append('intelligence', 10);
+                    formData.append('wisdom', 10);
+                    formData.append('charisma', 10);
+                    
+                    const response = await fetch(`api/character_safe.php?id=${characterId}`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    resultDiv.textContent = JSON.stringify(data, null, 2);
+                } catch (error) {
+                    resultDiv.textContent = `Error: ${error.message}`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
