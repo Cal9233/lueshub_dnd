@@ -1,6 +1,6 @@
-import withFormHandling from '../hoc/withFormHandling';
-import Footer from '../Components/Footer/Footer';
-import Header from '../Components/Headers/Header';
+import withFormHandling from '../../hoc/withFormHandling';
+import Footer from '../components/Footer/Footer';
+import Header from '../components/Headers/Header';
 import '../App.css';
 
 const LoginPage = ({ formData, handleChange, handleSubmit, error }) => {

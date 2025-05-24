@@ -1,7 +1,10 @@
-import HeroBanner from '../Components/HeroBanner/HeroBanner';
-import Footer from '../Components/Footer/Footer';
-import Header from '../Components/Headers/Header';
-import '../App.css';
+import HeroBanner from '../../components/HeroBanner/HeroBanner';
+import Footer from '../../components/Footer/Footer';
+import Header from '../../components/Headers/Header';
+import { FeatureCard } from '../../components/Card/Card';
+import { Section } from '../../components/Section/Section';
+import { FEATURES_DATA } from "../../utilities/features-data";
+import './Home.css';
 
 const LandingPage = () => (
   <div className="app">
@@ -12,6 +15,17 @@ const LandingPage = () => (
       secondaryHref="#contact"
     />
     <main>
+      <Section>
+        {FEATURES_DATA.map((feature, idx) => (
+          <FeatureCard 
+            key={idx}
+            id={feature.id}
+            icon={feature.icon}
+            title={feature.title}
+            content={feature.content}
+          />
+        ))}
+      </Section>
       <section className="features">
         <div className="feature-card">
           <div className="feature-icon">🧙‍♂️</div>
