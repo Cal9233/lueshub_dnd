@@ -1,0 +1,48 @@
+/* Stat Input Styles */
+.stat-input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-icon {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+}
+
+.stat-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-input {
+  width: 60px;
+  padding: 8px;
+  text-align: center;
+  font-size: 1.125rem;
+  font-weight: 600;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: border-color 0.3s;
+}
+
+.stat-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.stat-value span {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  text-align: center;
+}

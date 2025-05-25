@@ -1,0 +1,28 @@
+/* Page Header - Shared header style for non-hero pages */
+.page-header {
+  background: 
+    linear-gradient(rgba(36, 0, 70, 0.9), rgba(36, 0, 70, 0.95)),
+    url('https://images.unsplash.com/photo-1605118936262-9fcf9d3e146e') center/cover no-repeat;
+  color: var(--light-text);
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.page-header.login-header {
+  /* Login specific styles can go here if needed */
+}
+
+.header-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+.header-content p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}

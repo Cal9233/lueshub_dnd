@@ -2,6 +2,7 @@
   "name": "dnd-update",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://172.20.1.207:80",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",

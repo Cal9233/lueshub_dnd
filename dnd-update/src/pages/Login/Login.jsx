@@ -1,73 +1,104 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import { useAuth } from '../../contexts/AuthContext';
 import withFormHandling from '../../hoc/withFormHandling';
-import Footer from '../components/Footer/Footer';
-import Header from '../components/Headers/Header';
-import '../App.css';
+import PageHeader from '../../components/PageHeader/PageHeader';
+import Footer from '../../components/Footer/Footer';
+import Header from '../../components/Headers/Header';
+import Button from '../../components/Button/Button';
+import FormInput from '../../components/Form/FormInput';
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
+import { FOOTER_LINKS } from '../../utilities/footer-links';
+import './Login.css';
 
 const LoginPage = ({ formData, handleChange, handleSubmit, error }) => {
+  const navigate = useNavigate();
+  const { login, isAuthenticated } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, navigate]);
+
   const onSubmit = (e) =>
-    handleSubmit(e, (values, { setError }) => {
+    handleSubmit(e, async (values, { setError }) => {
       const { username = '', password = '' } = values;
       if (!username.trim() || !password.trim()) {
         setError('Please fill in all fields');
-      } else {
-        setError('');
-        // Placeholder for real authentication
+        return;
+      }
+      
+      setIsLoading(true);
+      setError('');
+      
+      try {
+        const result = await login(username, password);
+        if (result.success) {
+          navigate('/dashboard');
+        } else {
+          setError(result.message || 'Invalid username or password');
+        }
+      } catch (err) {
+        setError('An error occurred. Please try again.');
+      } finally {
+        setIsLoading(false);
       }
     });
 
   return (
     <div className="app">
-      <header className="login-header">
-        <div className="header-content">
-          <Header as="h1">LuesHub Dungeons & Dragons</Header>
-          <p>Login to access your campaigns and characters</p>
-        </div>
-      </header>
+      <PageHeader
+        title="LuesHub Dungeons & Dragons"
+        subtitle="Login to access your campaigns and characters"
+        className="login-header"
+      />
+      
       <main className="login-container">
         <div className="login-form-container">
           <Header as="h2">Adventurer Login</Header>
-          {error && <div className="error-message">{error}</div>}
+          <ErrorMessage message={error} />
+          
           <form onSubmit={onSubmit} className="login-form">
-            <div className="form-group">
-              <label htmlFor="username">Username</label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                value={formData.username || ''}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                value={formData.password || ''}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <button type="submit" className="cta-button login-button">Login</button>
+            <FormInput
+              id="username"
+              name="username"
+              type="text"
+              label="Username"
+              placeholder="Enter your username"
+              value={formData.username || ''}
+              onChange={handleChange}
+              required
+            />
+            
+            <FormInput
+              id="password"
+              name="password"
+              type="password"
+              label="Password"
+              placeholder="Enter your password"
+              value={formData.password || ''}
+              onChange={handleChange}
+              required
+            />
+            
+            <Button type="submit" className="login-button" disabled={isLoading}>
+              {isLoading ? 'Logging in...' : 'Login'}
+            </Button>
           </form>
+          
           <div className="login-footer">
-            <p>Don't have an account? <a href="#contact">Contact your DM</a></p>
+            <p>Don't have an account? <a href="/signup">Sign up here</a></p>
+            <p className="dm-note">
+              Or <a href="/#contact">contact your DM</a> to join an existing campaign
+            </p>
             <a href="/" className="back-link">Back to Home</a>
           </div>
         </div>
       </main>
-      <Footer>
-        <div className="footer-content">
-          <p>&copy; 2025 LuesHub D&D. All rights reserved.</p>
-          <div className="footer-links">
-            <a href="#privacy">Privacy Policy</a>
-            <a href="#terms">Terms of Service</a>
-            <a href="#contact">Contact Us</a>
-          </div>
-        </div>
-      </Footer>
+      
+      <Footer links={FOOTER_LINKS} />
     </div>
   );
 };
