@@ -1,0 +1,16 @@
+# Enable rewrite engine
+RewriteEngine On
+
+# Allow direct access to PHP files
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^(.*)$ $1 [L]
+
+# Security headers
+Header set X-Content-Type-Options "nosniff"
+Header set X-Frame-Options "DENY"
+Header set X-XSS-Protection "1; mode=block"
+
+# PHP configuration
+php_flag display_errors off
+php_value session.cookie_httponly 1
+php_value session.cookie_samesite "Lax"

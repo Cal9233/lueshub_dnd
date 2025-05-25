@@ -1,0 +1,161 @@
+/* Features Section */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  padding: 80px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.feature-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius);
+  padding: 30px;
+  text-align: center;
+  box-shadow: 
+    0 8px 32px 0 rgba(31, 38, 135, 0.37),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+  border-color: rgba(255, 215, 0, 0.3);
+  box-shadow: 
+    0 8px 32px 0 rgba(31, 38, 135, 0.5),
+    inset 0 0 30px rgba(255, 215, 0, 0.1),
+    0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+}
+
+.feature-card h2 {
+  margin-bottom: 15px;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+}
+
+.feature-card p {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* About Section */
+.about {
+  background: 
+    linear-gradient(135deg, rgba(36, 0, 70, 0.9), rgba(74, 20, 140, 0.7)),
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><defs><radialGradient id="fog"><stop offset="0%" style="stop-color:rgba(255,255,255,0.02)"/><stop offset="100%" style="stop-color:rgba(255,255,255,0)"/></radialGradient></defs><circle cx="200" cy="200" r="400" fill="url(%23fog)"/><circle cx="1500" cy="800" r="600" fill="url(%23fog)"/></svg>');
+  color: var(--light-text);
+  padding: 80px 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.about::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(ellipse at top left, rgba(138, 43, 226, 0.2) 0%, transparent 40%),
+    radial-gradient(ellipse at bottom right, rgba(75, 0, 130, 0.2) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.about h2 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+}
+
+.about p {
+  max-width: 800px;
+  margin: 0 auto 20px;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* Call to Action Section */
+.call-to-action {
+  background: 
+    linear-gradient(45deg, 
+      rgba(123, 44, 191, 0.9) 0%, 
+      rgba(90, 24, 154, 0.8) 50%, 
+      rgba(74, 20, 140, 0.9) 100%),
+    radial-gradient(circle at 30% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+  color: var(--light-text);
+  text-align: center;
+  padding: 80px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.call-to-action::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: sweep 8s infinite;
+}
+
+@keyframes sweep {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.call-to-action h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.call-to-action p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  opacity: 0.9;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Contact Section */
+.contact {
+  background: 
+    linear-gradient(135deg, 
+      rgba(26, 0, 51, 0.95) 0%, 
+      rgba(36, 0, 70, 0.9) 50%, 
+      rgba(74, 20, 140, 0.8) 100%);
+  color: var(--light-text);
+  padding: 80px 20px;
+  text-align: center;
+  position: relative;
+}
+
+.contact h2 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+}
+
+.contact p {
+  max-width: 800px;
+  margin: 0 auto 20px;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}

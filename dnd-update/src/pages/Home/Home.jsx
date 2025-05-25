@@ -1,82 +1,76 @@
 import HeroBanner from '../../components/HeroBanner/HeroBanner';
 import Footer from '../../components/Footer/Footer';
 import Header from '../../components/Headers/Header';
+import Button from '../../components/Button/Button';
+import ButtonGroup from '../../components/Button/ButtonGroup';
+import Paragraph from '../../components/Typography/Paragraph';
 import { FeatureCard } from '../../components/Card/Card';
 import { Section } from '../../components/Section/Section';
-import { FEATURES_DATA } from "../../utilities/features-data";
+import { FEATURES_DATA } from '../../utilities/features-data';
+import { FOOTER_LINKS } from '../../utilities/footer-links';
 import './Home.css';
 
-const LandingPage = () => (
+const Home = () => (
   <div className="app">
     <HeroBanner
-      primaryLabel="Sign In"
-      primaryHref="login.html"
+      title="LuesHub Dungeons & Dragons"
+      subtitle="Embark on epic adventures in magical realms"
+      primaryLabel="Login"
+      primaryHref="/login"
       secondaryLabel="Learn More"
       secondaryHref="#contact"
     />
+    
     <main>
-      <Section>
-        {FEATURES_DATA.map((feature, idx) => (
+      <Section className="features">
+        {FEATURES_DATA.map((feature) => (
           <FeatureCard 
-            key={idx}
-            id={feature.id}
+            key={feature.id}
             icon={feature.icon}
             title={feature.title}
             content={feature.content}
           />
         ))}
       </Section>
-      <section className="features">
-        <div className="feature-card">
-          <div className="feature-icon">🧙‍♂️</div>
-          <Header as="h2">Character Creation</Header>
-          <p>Create and manage your D&D characters with our easy-to-use character sheets.</p>
-        </div>
-        <div className="feature-card">
-          <div className="feature-icon">🎲</div>
-          <Header as="h2">Dice Roller</Header>
-          <p>Roll virtual dice for all your checks, saves, and attacks with our built-in dice roller.</p>
-        </div>
-        <div className="feature-card">
-          <div className="feature-icon">🗺️</div>
-          <Header as="h2">Campaign Management</Header>
-          <p>Organize your campaigns, track encounters, and manage your party's progress.</p>
-        </div>
-      </section>
 
-      <section className="about">
+      <Section className="about" variant="content" fullWidth>
         <Header as="h2">About LuesHub D&D</Header>
-        <p>
-          Welcome to LuesHub D&D, your ultimate companion for Dungeons & Dragons adventures.
+        <Paragraph>
+          Welcome to LuesHub D&D, your ultimate companion for Dungeons & Dragons adventures. 
           Whether you're a Dungeon Master weaving epic tales or a player embarking on heroic quests,
           our tools are designed to enhance your tabletop experience.
-        </p>
-        <p>
+        </Paragraph>
+        <Paragraph>
           Track character progression, manage spell slots, inventory, and more - all in one place.
           Join thousands of adventurers who have already enhanced their D&D experience with our platform.
-        </p>
-      </section>
+        </Paragraph>
+      </Section>
 
-      <section className="call-to-action">
+      <Section className="call-to-action" variant="content" fullWidth>
         <Header as="h2">Ready to Roll Initiative?</Header>
-        <p>Sign in to access your characters and campaigns!</p>
-        <div className="cta-buttons">
-          <a href="login.html" className="cta-button">Sign In</a>
-          <a href="#contact" className="cta-button secondary">Contact DM</a>
-        </div>
-      </section>
+        <Paragraph>Sign up now and start your adventure!</Paragraph>
+        <ButtonGroup>
+          <Button href="/signup">Sign Up</Button>
+          <Button variant="secondary" href="#contact">Learn More</Button>
+        </ButtonGroup>
+      </Section>
+
+      <Section id="contact" className="contact" variant="content" fullWidth>
+        <Header as="h2">Contact Us</Header>
+        <Paragraph>
+          Ready to start your adventure? Contact your Dungeon Master to get access to the platform.
+        </Paragraph>
+        <Paragraph>
+          For technical support or questions about LuesHub D&D, reach out to our support team.
+        </Paragraph>
+        <ButtonGroup>
+          <Button href="mailto:support@lueshub.com">Email Support</Button>
+        </ButtonGroup>
+      </Section>
     </main>
-    <Footer>
-      <div className="footer-content">
-        <p>&copy; 2025 LuesHub D&D. All rights reserved.</p>
-        <div className="footer-links">
-          <a href="#privacy">Privacy Policy</a>
-          <a href="#terms">Terms of Service</a>
-          <a href="#contact">Contact Us</a>
-        </div>
-      </div>
-    </Footer>
+    
+    <Footer links={FOOTER_LINKS} />
   </div>
 );
 
-export default LandingPage;
+export default Home;

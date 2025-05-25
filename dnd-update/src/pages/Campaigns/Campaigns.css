@@ -1,0 +1,93 @@
+/* Campaigns Page Styles */
+.placeholder-container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 40px;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  box-shadow: 
+    0 8px 32px rgba(31, 38, 135, 0.37),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.placeholder-icon {
+  font-size: 5rem;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+}
+
+.placeholder-title {
+  font-family: 'MedievalSharp', cursive;
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+}
+
+.placeholder-text {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 30px;
+}
+
+.features-list {
+  margin: 30px 0;
+}
+
+.features-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  text-align: left;
+  display: inline-block;
+}
+
+.features-bullets li {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin: 10px 0;
+  padding-left: 30px;
+  position: relative;
+}
+
+.features-bullets li::before {
+  content: '•';
+  position: absolute;
+  left: 10px;
+  color: var(--primary-color);
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .placeholder-container {
+    margin: 20px auto;
+    padding: 30px 20px;
+  }
+
+  .placeholder-icon {
+    font-size: 4rem;
+  }
+
+  .placeholder-title {
+    font-size: 2rem;
+  }
+
+  .placeholder-text {
+    font-size: 1rem;
+  }
+
+  .features-bullets li {
+    font-size: 1rem;
+  }
+}
