@@ -15,16 +15,10 @@ import './Characters.css';
 const Characters = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [theme, setTheme] = useState('light');
   const [characters, setCharacters] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load saved theme
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    setTheme(savedTheme);
-    document.documentElement.setAttribute('data-theme', savedTheme);
-
     // Fetch characters from API
     fetchCharacters();
   }, []);
@@ -46,12 +40,6 @@ const Characters = () => {
     }
   };
 
-  const handleThemeToggle = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-  };
 
   const handleViewCharacter = (id) => {
     navigate(`/character/${id}`);
@@ -77,8 +65,6 @@ const Characters = () => {
       <Navbar 
         username={user?.username}
         activePage="characters"
-        onThemeToggle={handleThemeToggle}
-        currentTheme={theme}
       />
       
       <main className="main-content">
@@ -119,8 +105,8 @@ const Characters = () => {
             <EmptyState
               icon="fas fa-user-plus"
               message="No characters yet. Create your first hero!"
-              actionText="Create Character"
-              actionHref="/character/new"
+              /*actionText="Create Character"
+              actionHref="/character/new"*/
             />
           )}
         </PageContainer>

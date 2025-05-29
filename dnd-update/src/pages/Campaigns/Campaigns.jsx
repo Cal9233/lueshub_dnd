@@ -12,21 +12,8 @@ import './Campaigns.css';
 const Campaigns = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [theme, setTheme] = useState('light');
 
-  useEffect(() => {
-    // Load saved theme
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    setTheme(savedTheme);
-    document.documentElement.setAttribute('data-theme', savedTheme);
-  }, []);
 
-  const handleThemeToggle = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-  };
 
   const handleBackToDashboard = () => {
     navigate('/dashboard');
@@ -37,8 +24,6 @@ const Campaigns = () => {
       <Navbar 
         username={user?.username}
         activePage="campaigns"
-        onThemeToggle={handleThemeToggle}
-        currentTheme={theme}
       />
       
       <main className="main-content">

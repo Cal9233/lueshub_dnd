@@ -72,6 +72,7 @@
   height: 40px;
   border-radius: 50%;
   background-color: var(--bg-tertiary);
+  color: var(--text-primary);
   border: none;
   cursor: pointer;
   transition: all 0.3s;
@@ -93,6 +94,7 @@
 .user-menu-toggle {
   padding: 0.5rem 1rem;
   background-color: var(--bg-tertiary);
+  color: var(--text-primary);
   border: none;
   border-radius: 0.5rem;
   font-weight: 500;
@@ -118,14 +120,23 @@
   z-index: 1000;
 }
 
-.user-menu-dropdown a {
+.user-menu-dropdown a,
+.user-menu-dropdown .logout-button {
   display: block;
   padding: 0.75rem 1rem;
   color: var(--text-primary);
   transition: background-color 0.3s;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
 }
 
-.user-menu-dropdown a:hover {
+.user-menu-dropdown a:hover,
+.user-menu-dropdown .logout-button:hover {
   background-color: var(--bg-tertiary);
 }
 

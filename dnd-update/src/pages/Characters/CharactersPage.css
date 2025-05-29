@@ -1,0 +1,6 @@
+/* Characters page now uses standard app layout */
+/* Add danger color variables if not present in App.css */
+:root {
+  --danger-color: #dc3545;
+  --danger-dark: #c82333;
+}

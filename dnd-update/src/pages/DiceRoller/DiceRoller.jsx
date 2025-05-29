@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useAuth } from '../../contexts/AuthContext';
 import Navbar from '../../components/Navbar/Navbar';
 import PageContainer from '../../components/PageContainer/PageContainer';
+import IsometricDice from '../../components/IsometricDice/IsometricDice';
 import './DiceRoller.css';
 
 const DiceItem = ({ dice, icon, selected, onClick }) => (
@@ -24,7 +25,6 @@ DiceItem.propTypes = {
 };
 
 const DiceRoller = () => {
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
   const { user } = useAuth();
   const [selectedDice, setSelectedDice] = useState('d20');
   const [viewMode, setViewMode] = useState('2d');
@@ -34,17 +34,8 @@ const DiceRoller = () => {
   const [currentResult, setCurrentResult] = useState('Roll the dice to see results');
   const [currentTotal, setCurrentTotal] = useState(0);
   const [isRolling, setIsRolling] = useState(false);
-  const canvasRef = useRef(null);
+  const [diceToRoll, setDiceToRoll] = useState([]);
 
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
-
-  const handleThemeToggle = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-  };
 
   const diceTypes = [
     { type: 'd4', icon: 'fas fa-dice-d4', sides: 4 },
@@ -79,18 +70,48 @@ const DiceRoller = () => {
     if (isRolling) return;
     
     setIsRolling(true);
-    const diceInfo = diceTypes.find(d => d.type === selectedDice);
-    const rolls = [];
-    let total = 0;
+    
+    if (viewMode === '3d') {
+      // Create array of dice for 3D rolling with unique IDs
+      const dice = [];
+      const rollId = Date.now();
+      for (let i = 0; i < diceCount; i++) {
+        dice.push({ type: selectedDice, id: rollId + i });
+      }
+      console.log('Rolling 3D dice:', dice);
+      setDiceToRoll(dice);
+    } else {
+      // 2D rolling logic with animation
+      const diceInfo = diceTypes.find(d => d.type === selectedDice);
+      
+      // Show rolling animation immediately
+      console.log('Starting 2D dice roll animation');
+      
+      // Simulate rolling animation
+      setTimeout(() => {
+        const rolls = [];
+        let total = 0;
 
-    // Simulate dice rolling
-    for (let i = 0; i < diceCount; i++) {
-      const roll = Math.floor(Math.random() * diceInfo.sides) + 1;
-      rolls.push(roll);
-      total += roll;
+        for (let i = 0; i < diceCount; i++) {
+          const roll = Math.floor(Math.random() * diceInfo.sides) + 1;
+          rolls.push(roll);
+          total += roll;
+        }
+
+        total += modifier;
+
+        handleRollComplete({
+          individual: rolls.reduce((acc, roll, i) => ({ ...acc, [i]: roll }), {}),
+          totals: { [selectedDice]: rolls.reduce((a, b) => a + b, 0) },
+          grandTotal: total - modifier
+        });
+      }, 1000); // 1 second animation delay
     }
+  };
 
-    total += modifier;
+  const handleRollComplete = (results) => {
+    const rolls = Object.values(results.individual);
+    const total = results.grandTotal + modifier;
 
     // Update results
     const rollString = rolls.join(' + ');
@@ -109,17 +130,17 @@ const DiceRoller = () => {
     };
     setRollHistory([historyEntry, ...rollHistory.slice(0, 9)]);
 
-    // Simulate rolling animation
-    setTimeout(() => {
-      setIsRolling(false);
-    }, 1000);
+    setIsRolling(false);
+    // Don't clear dice immediately - let them stay visible
+    // setDiceToRoll([]); 
   };
 
   const clearTable = () => {
     setCurrentResult('Roll the dice to see results');
     setCurrentTotal(0);
     setRollHistory([]);
-    // In a real implementation, this would clear the 3D dice from the canvas
+    setDiceToRoll([]);
+    setIsRolling(false);
   };
 
   return (
@@ -127,8 +148,6 @@ const DiceRoller = () => {
       <Navbar 
         username={user?.username}
         activePage="dice-roller"
-        onThemeToggle={handleThemeToggle}
-        currentTheme={theme}
       />
 
       <main className="main-content">
@@ -271,11 +290,30 @@ const DiceRoller = () => {
 
             <div className="dice-table-container">
               <div id="dice-canvas-container" className={viewMode === '3d' ? 'mode-3d' : ''}>
-                <canvas ref={canvasRef} id="dice-canvas"></canvas>
-                {viewMode === '3d' && (
-                  <div id="loading-overlay" style={{ display: 'none' }}>
-                    <i className="fas fa-spinner fa-spin"></i>
-                    <p>Loading 3D Dice...</p>
+                {viewMode === '3d' ? (
+                  <IsometricDice 
+                    dice={diceToRoll} 
+                    onRollComplete={handleRollComplete}
+                  />
+                ) : (
+                  <div className="dice-2d-display">
+                    <div className="dice-2d-result">
+                      {isRolling ? (
+                        <>
+                          <i className="fas fa-dice fa-spin"></i>
+                          <div style={{ marginTop: '1rem', fontSize: '1.5rem' }}>Rolling...</div>
+                        </>
+                      ) : (
+                        <>
+                          {diceTypes.find(d => d.type === selectedDice) && (
+                            <i className={diceTypes.find(d => d.type === selectedDice).icon}></i>
+                          )}
+                          <div style={{ marginTop: '1rem', fontSize: '1.5rem' }}>
+                            {currentTotal > 0 ? `Rolled ${currentResult}` : 'Click Roll Dice'}
+                          </div>
+                        </>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
