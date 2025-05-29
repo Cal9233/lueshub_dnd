@@ -17,7 +17,7 @@
 
 // Base URL for all API requests
 // Can be overridden via environment variable for different deployments
-const API_BASE_URL = process.env.REACT_APP_API_URL || '/dnd-update/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || '/api';
 
 /**
  * API Endpoint Definitions

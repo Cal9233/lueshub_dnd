@@ -1,0 +1,24 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  
+  # Don't rewrite files or directories
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  
+  # Don't rewrite API calls
+  RewriteCond %{REQUEST_URI} !^/api/
+  
+  # Don't rewrite audio files
+  RewriteCond %{REQUEST_URI} !^/audio_files/
+  
+  # Rewrite everything else to index.html
+  RewriteRule ^.*$ /index.html [L,QSA]
+</IfModule>
+
+# Security headers
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+</IfModule>
