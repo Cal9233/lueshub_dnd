@@ -1,3 +1,5 @@
+import React, { useEffect } from 'react';
+import { useTheme } from '../../contexts/ThemeContext';
 import HeroBanner from '../../components/HeroBanner/HeroBanner';
 import Footer from '../../components/Footer/Footer';
 import Header from '../../components/Headers/Header';
@@ -10,7 +12,10 @@ import { FEATURES_DATA } from '../../utilities/features-data';
 import { FOOTER_LINKS } from '../../utilities/footer-links';
 import './Home.css';
 
-const Home = () => (
+const Home = () => {
+  const { currentTheme } = useTheme();
+  
+  return (
   <div className="app">
     <HeroBanner
       title="LuesHub Dungeons & Dragons"
@@ -49,10 +54,9 @@ const Home = () => (
       <Section className="call-to-action" variant="content" fullWidth>
         <Header as="h2">Ready to Roll Initiative?</Header>
         <Paragraph>Sign up now and start your adventure!</Paragraph>
-        <ButtonGroup>
+        <div className="center-button">
           <Button href="/signup">Sign Up</Button>
-          <Button variant="secondary" href="#contact">Learn More</Button>
-        </ButtonGroup>
+        </div>
       </Section>
 
       <Section id="contact" className="contact" variant="content" fullWidth>
@@ -71,6 +75,7 @@ const Home = () => (
     
     <Footer links={FOOTER_LINKS} />
   </div>
-);
+  );
+};
 
 export default Home;

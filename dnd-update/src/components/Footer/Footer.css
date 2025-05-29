@@ -1,9 +1,10 @@
 /* Footer */
 footer {
-    background-color: #1a0033;
-    color: var(--light-text);
+    background-color: var(--footer-bg);
+    color: var(--text-primary);
     padding: 30px 20px;
     margin-top: auto;
+    border-top: 1px solid var(--border-color);
 }
 
 .footer-content {
@@ -21,14 +22,13 @@ footer {
 }
 
 .footer-links a {
-    color: var(--light-text);
+    color: var(--text-secondary);
     text-decoration: none;
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
+    transition: color 0.3s ease;
 }
 
 .footer-links a:hover {
-    opacity: 1;
+    color: var(--primary-color);
 }
 
 /* Responsive */

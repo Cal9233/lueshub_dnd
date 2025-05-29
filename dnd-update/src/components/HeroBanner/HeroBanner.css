@@ -1,18 +1,22 @@
 .hero {
   background: 
     linear-gradient(180deg, 
-      rgba(25, 25, 112, 0.3) 0%, 
-      rgba(138, 43, 226, 0.4) 20%,
-      rgba(75, 0, 130, 0.5) 50%,
-      rgba(15, 52, 96, 0.7) 80%,
-      rgba(11, 19, 43, 0.9) 100%),
-    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><defs><filter id="stars"><feTurbulence baseFrequency="0.02" seed="5" /><feColorMatrix values="0 0 0 9 -4 0 0 0 9 -4 0 0 0 9 -4 0 0 0 0 1"/></filter></defs><rect width="1920" height="1080" filter="url(%23stars)" opacity="0.3"/></svg>'),
+      rgba(0, 0, 0, 0.5) 0%, 
+      rgba(0, 0, 0, 0.7) 100%),
+    linear-gradient(135deg, 
+      var(--primary-color) 0%, 
+      var(--primary-dark) 100%) center/cover,
     url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23') center/cover no-repeat;
-  color: var(--light-text);
+  background-blend-mode: normal, multiply, normal;
+  color: white;
   text-align: center;
   padding: 120px 20px;
   position: relative;
   overflow: hidden;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .hero::before {
@@ -22,7 +26,7 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 1%, transparent 1%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1%, transparent 1%);
   background-size: 20px 20px;
   animation: twinkle 200s linear infinite;
   pointer-events: none;
@@ -35,7 +39,7 @@
   left: 0;
   right: 0;
   height: 100px;
-  background: linear-gradient(to top, rgba(11, 19, 43, 1), transparent);
+  background: linear-gradient(to top, var(--bg-primary), transparent);
   pointer-events: none;
 }
 
@@ -55,19 +59,15 @@
   font-size: 3.5rem;
   margin-bottom: 20px;
   text-shadow: 
-    0 0 10px rgba(255, 215, 0, 0.5),
-    0 0 20px rgba(255, 215, 0, 0.3),
+    0 0 10px rgba(0, 0, 0, 0.5),
     0 2px 4px rgba(0, 0, 0, 0.8);
-  background: linear-gradient(135deg, #ffd700, #fff5b5, #ffd700);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: white;
   animation: shimmer 3s ease-in-out infinite;
 }
 
 @keyframes shimmer {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.8; }
+  50% { opacity: 0.9; }
 }
 
 .hero p {
@@ -86,6 +86,11 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .hero {
+    padding: 80px 20px;
+    min-height: 50vh;
+  }
+  
   .hero h1 {
     font-size: 2.5rem;
   }

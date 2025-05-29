@@ -15,7 +15,6 @@ import './Character.css';
 const Character = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [theme, setTheme] = useState('light');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   
@@ -41,11 +40,6 @@ const Character = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    // Load saved theme
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    setTheme(savedTheme);
-    document.documentElement.setAttribute('data-theme', savedTheme);
-
     // Load character data
     if (id && id !== 'new') {
       fetchCharacter();
@@ -71,12 +65,6 @@ const Character = () => {
     }
   };
 
-  const handleThemeToggle = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-  };
 
   const handleInputChange = (field) => (e) => {
     const value = e.target.type === 'number' ? parseInt(e.target.value) || 0 : e.target.value;
@@ -117,8 +105,6 @@ const Character = () => {
         <Navbar 
           username={user?.username}
           activePage="characters"
-          onThemeToggle={handleThemeToggle}
-          currentTheme={theme}
         />
         <main className="main-content">
           <div className="loading-container">
@@ -136,8 +122,6 @@ const Character = () => {
       <Navbar 
         username={user?.username}
         activePage="characters"
-        onThemeToggle={handleThemeToggle}
-        currentTheme={theme}
       />
       
       <div className="character-container">

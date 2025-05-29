@@ -24,13 +24,11 @@ import Footer from '../../components/Footer/Footer';
 import DashboardCard from '../../components/DashboardCard/DashboardCard';
 import EmptyState from '../../components/EmptyState/EmptyState';
 import Header from '../../components/Headers/Header';
+import AudioControls from '../../components/AudioControls/AudioControls';
 import { FOOTER_LINKS } from '../../utilities/footer-links';
 import './Dashboard.css';
 
 const Dashboard = () => {
-  // Theme state - persists user's theme preference (light/dark)
-  const [theme, setTheme] = useState('light');
-  
   // User authentication context - provides current user data
   const { user } = useAuth();
   
@@ -47,15 +45,10 @@ const Dashboard = () => {
   });
 
   /**
-   * Initial load effect - handles theme restoration and data fetching
+   * Initial load effect - handles data fetching
    * Runs when component mounts and when user authentication state changes
    */
   useEffect(() => {
-    // Load saved theme from localStorage to maintain user preference
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    setTheme(savedTheme);
-    document.documentElement.setAttribute('data-theme', savedTheme);
-
     // Fetch dashboard data only if user is authenticated
     if (user) {
       fetchDashboardData();
@@ -97,28 +90,16 @@ const Dashboard = () => {
     }
   };
 
-  /**
-   * Toggles between light and dark theme
-   * Updates DOM attribute and persists preference to localStorage
-   */
-  const handleThemeToggle = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-  };
 
   // Check if current user is a Dungeon Master - affects available actions
   const isDM = user?.role === 'dungeon_master';
 
   return (
     <div className="app">
-      {/* Navigation bar with theme toggle and user info */}
+      {/* Navigation bar with user info */}
       <Navbar 
         username={user?.username}
         activePage="dashboard"
-        onThemeToggle={handleThemeToggle}
-        currentTheme={theme}
       />
       
       <main className="main-content">
@@ -217,13 +198,22 @@ const Dashboard = () => {
             />
           </DashboardCard>
 
+          {/* Ambient Music Card - audio controls for DMs and players */}
+          <DashboardCard
+            id="ambient-music-card"
+            title="Ambient Music"
+            icon="fas fa-music"
+            elevation="raised"
+          >
+            <AudioControls />
+          </DashboardCard>
+
           {/* Quick Actions Card - provides shortcuts to common tasks */}
           <DashboardCard
             id="quick-actions-card"
             title="Quick Actions"
             icon="fas fa-bolt"
             elevation="raised"
-            gradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
           >
             <div className="quick-actions">
               {/* Create new character button */}
@@ -240,10 +230,16 @@ const Dashboard = () => {
               
               {/* Create campaign button - only shown to DMs */}
               {isDM && (
-                <a href="/campaigns/new" className="action-button">
-                  <i className="fas fa-plus-circle"></i>
-                  <span>New Campaign</span>
-                </a>
+                <>
+                  <a href="/campaigns/new" className="action-button">
+                    <i className="fas fa-plus-circle"></i>
+                    <span>New Campaign</span>
+                  </a>
+                  <a href="/master-controls" className="action-button">
+                    <i className="fas fa-crown"></i>
+                    <span>DM Controls</span>
+                  </a>
+                </>
               )}
               
               {/* Access to notes/journal */}

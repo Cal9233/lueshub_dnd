@@ -1,0 +1,153 @@
+.master-controls-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+}
+
+.master-controls-content {
+  flex: 1;
+  padding: 2rem 1rem;
+}
+
+.master-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Audio Section */
+.audio-section {
+  margin-bottom: 4rem;
+}
+
+.audio-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--primary-color);
+  font-family: 'MedievalSharp', cursive;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.section-description {
+  color: var(--text-secondary);
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
+}
+
+/* Controls Section */
+.controls-section {
+  margin-top: 4rem;
+}
+
+.controls-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--primary-color);
+  font-family: 'MedievalSharp', cursive;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.control-card {
+  background: linear-gradient(135deg, 
+    rgba(var(--primary-rgb), 0.1), 
+    rgba(var(--primary-rgb), 0.05));
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(var(--primary-rgb), 0.3);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 
+    0 8px 32px rgba(var(--primary-rgb), 0.2),
+    inset 0 0 20px rgba(var(--primary-rgb), 0.1);
+  transition: all 0.3s ease;
+}
+
+.control-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--primary-color);
+  box-shadow: 
+    0 12px 40px rgba(var(--primary-rgb), 0.3),
+    inset 0 0 30px rgba(var(--primary-rgb), 0.15);
+}
+
+.control-icon {
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 0 10px rgba(var(--primary-rgb), 0.3));
+}
+
+.control-title {
+  font-family: 'MedievalSharp', cursive;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.control-description {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.control-button {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.control-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+}
+
+.control-status {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: rgba(var(--primary-rgb), 0.1);
+  border-radius: 20px;
+  border: 1px solid rgba(var(--primary-rgb), 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .master-controls-content {
+    padding: 1rem;
+  }
+
+  .audio-section h2,
+  .controls-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .controls-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .control-card {
+    padding: 1.5rem;
+  }
+}

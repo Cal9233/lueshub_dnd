@@ -4,14 +4,19 @@
   "private": true,
   "proxy": "http://172.20.1.207:80",
   "dependencies": {
+    "@react-three/drei": "^10.0.8",
+    "@react-three/fiber": "^9.1.2",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "cannon-es": "^0.20.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router": "^7.6.0",
     "react-scripts": "5.0.1",
+    "react-toastify": "^11.0.5",
+    "three": "^0.176.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

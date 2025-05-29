@@ -1,122 +1,181 @@
 <?php
-require_once 'config.php';
+session_start();
+require_once 'db.php';
 
-// Require authentication
-requireAuth();
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: http://localhost:3000');
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
 
-$method = $_SERVER['REQUEST_METHOD'];
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'Not authenticated']);
+    exit();
+}
+
 $userId = $_SESSION['user_id'];
 
 try {
-    $db = getDB();
-    
-    switch ($method) {
+    switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
-            // Get specific character or all characters
             if (isset($_GET['id'])) {
-                $characterId = intval($_GET['id']);
-                
                 // Get specific character
-                $stmt = $db->prepare("SELECT * FROM characters WHERE id = ? AND user_id = ?");
+                $characterId = (int)$_GET['id'];
+                $stmt = $pdo->prepare("SELECT * FROM characters WHERE id = ? AND user_id = ?");
                 $stmt->execute([$characterId, $userId]);
-                $character = $stmt->fetch();
+                $character = $stmt->fetch(PDO::FETCH_ASSOC);
                 
-                if (!$character) {
-                    sendResponse(['success' => false, 'message' => 'Character not found'], 404);
+                if ($character) {
+                    // Parse JSON fields
+                    $character['spell_slots_object'] = json_decode($character['spell_slots_json'] ?? '{}', true);
+                    $character['spells_array'] = json_decode($character['spells_array_json'] ?? '[]', true);
+                    $character['notes_array'] = json_decode($character['notes'] ?? '[]', true);
+                    
+                    echo json_encode(['success' => true, 'character' => $character]);
+                } else {
+                    http_response_code(404);
+                    echo json_encode(['success' => false, 'message' => 'Character not found']);
                 }
-                
-                // Parse JSON fields
-                if (!empty($character['spells_array_json'])) {
-                    $character['spells'] = json_decode($character['spells_array_json'], true);
-                }
-                
-                sendResponse(['success' => true, 'character' => $character]);
             } else {
                 // Get all characters for user
-                $stmt = $db->prepare("SELECT id, name, race, class, level, hit_points as hp, max_hit_points as max_hp, armor_class as ac FROM characters WHERE user_id = ? ORDER BY name");
+                $stmt = $pdo->prepare("SELECT id, name, race, class, level, armor_class, hit_points, max_hit_points, portrait_url FROM characters WHERE user_id = ? ORDER BY name");
                 $stmt->execute([$userId]);
-                $characters = $stmt->fetchAll();
+                $characters = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 
-                sendResponse(['success' => true, 'characters' => $characters]);
+                echo json_encode(['success' => true, 'characters' => $characters]);
             }
             break;
             
         case 'POST':
             // Create or update character
-            $input = json_decode(file_get_contents('php://input'), true);
+            $data = json_decode(file_get_contents('php://input'), true);
             
-            if (isset($input['character_id'])) {
+            // Validate required fields
+            if (!isset($data['name']) || empty($data['name'])) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'message' => 'Character name is required']);
+                exit();
+            }
+            
+            // Prepare data with defaults
+            $characterData = [
+                'name' => $data['name'] ?? '',
+                'race' => $data['race'] ?? '',
+                'class' => $data['class'] ?? '',
+                'level' => (int)($data['level'] ?? 1),
+                'armor_class' => (int)($data['armor_class'] ?? 10),
+                'hit_points' => (int)($data['hit_points'] ?? 10),
+                'max_hit_points' => (int)($data['max_hit_points'] ?? 10),
+                'temp_hit_points' => (int)($data['temp_hit_points'] ?? 0),
+                'strength' => (int)($data['strength'] ?? 10),
+                'dexterity' => (int)($data['dexterity'] ?? 10),
+                'constitution' => (int)($data['constitution'] ?? 10),
+                'intelligence' => (int)($data['intelligence'] ?? 10),
+                'wisdom' => (int)($data['wisdom'] ?? 10),
+                'charisma' => (int)($data['charisma'] ?? 10),
+                'gold' => (int)($data['gold'] ?? 0),
+                'silver' => (int)($data['silver'] ?? 0),
+                'copper' => (int)($data['copper'] ?? 0),
+                'spell_save_dc' => (int)($data['spell_save_dc'] ?? 10),
+                'spell_attack_bonus' => (int)($data['spell_attack_bonus'] ?? 0),
+                'spell_slots_json' => $data['spell_slots_json'] ?? '{}',
+                'known_spells' => $data['known_spells'] ?? '',
+                'spells_array_json' => $data['spells_array_json'] ?? '[]',
+                'weapons' => $data['weapons'] ?? '',
+                'gear' => $data['gear'] ?? '',
+                'background' => $data['background'] ?? '',
+                'notes' => $data['notes'] ?? '[]',
+                'portrait_url' => $data['portrait_url'] ?? '',
+                'initiative' => (int)($data['initiative'] ?? 0),
+                'speed' => (int)($data['speed'] ?? 30),
+                'hit_dice_current' => (int)($data['hit_dice_current'] ?? 1),
+                'hit_dice_max' => (int)($data['hit_dice_max'] ?? 1),
+                'hit_dice_type' => $data['hit_dice_type'] ?? 'd8',
+                'passive_perception' => (int)($data['passive_perception'] ?? 10),
+                'proficiency_bonus' => (int)($data['proficiency_bonus'] ?? 2),
+                'spellcasting_ability' => $data['spellcasting_ability'] ?? 'intelligence'
+            ];
+            
+            if (isset($data['id']) && $data['id']) {
                 // Update existing character
-                $characterId = intval($input['character_id']);
+                $characterId = (int)$data['id'];
                 
                 // Verify ownership
-                $stmt = $db->prepare("SELECT id FROM characters WHERE id = ? AND user_id = ?");
+                $stmt = $pdo->prepare("SELECT id FROM characters WHERE id = ? AND user_id = ?");
                 $stmt->execute([$characterId, $userId]);
                 if (!$stmt->fetch()) {
-                    sendResponse(['success' => false, 'message' => 'Character not found'], 404);
+                    http_response_code(403);
+                    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+                    exit();
                 }
                 
-                // Build update query dynamically
-                $updates = [];
-                $params = [];
-                $allowedFields = ['name', 'race', 'class', 'level', 'hit_points', 'max_hit_points', 'temp_hit_points', 'armor_class'];
-                
-                foreach ($allowedFields as $field) {
-                    if (isset($input[$field])) {
-                        $updates[] = "$field = ?";
-                        $params[] = $input[$field];
-                    }
+                // Build update query
+                $fields = [];
+                $values = [];
+                foreach ($characterData as $key => $value) {
+                    $fields[] = "$key = ?";
+                    $values[] = $value;
                 }
+                $values[] = $characterId;
+                $values[] = $userId;
                 
-                if (!empty($updates)) {
-                    $params[] = $characterId;
-                    $params[] = $userId;
-                    $sql = "UPDATE characters SET " . implode(', ', $updates) . " WHERE id = ? AND user_id = ?";
-                    $stmt = $db->prepare($sql);
-                    $stmt->execute($params);
-                }
+                $sql = "UPDATE characters SET " . implode(', ', $fields) . " WHERE id = ? AND user_id = ?";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute($values);
                 
-                sendResponse(['success' => true, 'message' => 'Character updated']);
+                echo json_encode(['success' => true, 'message' => 'Character updated successfully', 'id' => $characterId]);
             } else {
                 // Create new character
-                $stmt = $db->prepare("INSERT INTO characters (user_id, name, race, class, level, hit_points, max_hit_points, armor_class) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-                $stmt->execute([
-                    $userId,
-                    $input['name'] ?? 'New Character',
-                    $input['race'] ?? 'Human',
-                    $input['class'] ?? 'Fighter',
-                    $input['level'] ?? 1,
-                    $input['hit_points'] ?? 10,
-                    $input['max_hit_points'] ?? 10,
-                    $input['armor_class'] ?? 10
-                ]);
+                $characterData['user_id'] = $userId;
                 
-                $characterId = $db->lastInsertId();
-                sendResponse(['success' => true, 'character_id' => $characterId, 'message' => 'Character created']);
+                $fields = array_keys($characterData);
+                $placeholders = array_fill(0, count($fields), '?');
+                
+                $sql = "INSERT INTO characters (" . implode(', ', $fields) . ") VALUES (" . implode(', ', $placeholders) . ")";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute(array_values($characterData));
+                
+                $characterId = $pdo->lastInsertId();
+                echo json_encode(['success' => true, 'message' => 'Character created successfully', 'id' => $characterId]);
             }
             break;
             
         case 'DELETE':
-            // Delete character
             if (!isset($_GET['id'])) {
-                sendResponse(['success' => false, 'message' => 'Character ID required'], 400);
+                http_response_code(400);
+                echo json_encode(['success' => false, 'message' => 'Character ID required']);
+                exit();
             }
             
-            $characterId = intval($_GET['id']);
-            $stmt = $db->prepare("DELETE FROM characters WHERE id = ? AND user_id = ?");
+            $characterId = (int)$_GET['id'];
+            
+            // Delete character (with ownership check)
+            $stmt = $pdo->prepare("DELETE FROM characters WHERE id = ? AND user_id = ?");
             $stmt->execute([$characterId, $userId]);
             
             if ($stmt->rowCount() > 0) {
-                sendResponse(['success' => true, 'message' => 'Character deleted']);
+                echo json_encode(['success' => true, 'message' => 'Character deleted successfully']);
             } else {
-                sendResponse(['success' => false, 'message' => 'Character not found'], 404);
+                http_response_code(404);
+                echo json_encode(['success' => false, 'message' => 'Character not found']);
             }
             break;
             
         default:
-            sendResponse(['success' => false, 'message' => 'Method not allowed'], 405);
+            http_response_code(405);
+            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+            break;
     }
 } catch (Exception $e) {
-    error_log('Character API error: ' . $e->getMessage());
-    sendResponse(['success' => false, 'message' => 'An error occurred'], 500);
+    error_log('Character API Error: ' . $e->getMessage());
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Server error occurred']);
 }
+?>

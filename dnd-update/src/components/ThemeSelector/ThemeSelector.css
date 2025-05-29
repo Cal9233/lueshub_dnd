@@ -1,0 +1,105 @@
+/* ThemeSelector Component Styles */
+
+.theme-selector {
+  position: relative;
+}
+
+.theme-selector-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.theme-selector-toggle:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.theme-selector-toggle i {
+  font-size: 1.25rem;
+}
+
+.theme-selector-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-lg);
+  min-width: 200px;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.theme-selector-header {
+  padding: 0.75rem 1rem;
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.theme-option:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.theme-option.active {
+  background-color: rgba(123, 44, 191, 0.1);
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.theme-option i:first-child {
+  width: 20px;
+  text-align: center;
+}
+
+.theme-option span {
+  flex: 1;
+  text-align: left;
+}
+
+.check-icon {
+  font-size: 0.875rem;
+  color: var(--primary-color);
+}
+
+/* Special styling for D&D theme icon */
+.theme-option .fa-dragon {
+  color: var(--primary-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .theme-selector-dropdown {
+    right: -50px;
+  }
+}
