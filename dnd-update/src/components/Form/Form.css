@@ -17,10 +17,29 @@
   border-radius: var(--border-radius);
   font-size: 1rem;
   transition: border-color 0.3s;
+  color: #333;
+  background-color: white;
 }
 
 .form-group input:focus {
   border-color: var(--primary-color);
   outline: none;
   box-shadow: 0 0 0 2px rgba(125, 32, 39, 0.2);
+}
+
+/* Theme-specific input styles */
+[data-theme="dnd"] .form-group input {
+  color: #333;
+  background-color: #f4e4d4;
+  border-color: #5a3f33;
+}
+
+[data-theme="dnd"] .form-group input::placeholder {
+  color: #666;
+  opacity: 0.8;
+}
+
+[data-theme="dnd"] .form-group input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(139, 0, 0, 0.2);
 }
