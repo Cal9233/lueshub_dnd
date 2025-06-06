@@ -20,7 +20,7 @@ const PLAYLISTS = {
     name: 'Tavern Melodies',
     icon: 'fas fa-beer',
     description: 'Lively tunes and bard songs',
-    tracks: ['tavern1.mp3', 'tavern2.mp3']
+    tracks: ['test.mp3']
   },
   battle: {
     id: 'battle',
@@ -65,7 +65,7 @@ export const AudioProvider = ({ children }) => {
   const [currentTrack, setCurrentTrack] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
-  const [syncEnabled, setSyncEnabled] = useState(true);
+  const [syncEnabled, setSyncEnabled] = useState(false);
   const audioRef = useRef(new Audio());
   const pollingIntervalRef = useRef(null);
 
@@ -77,7 +77,7 @@ export const AudioProvider = ({ children }) => {
     if (!syncEnabled) return;
 
     try {
-      const response = await fetch('/dnd-update/api/audio_state.php', fetchConfig);
+      const response = await fetch('/api/audio_state.php', fetchConfig);
       const data = await response.json();
 
       if (data.success && data.audioState) {
@@ -112,7 +112,7 @@ export const AudioProvider = ({ children }) => {
     if (!isDM || !syncEnabled) return;
 
     try {
-      await fetch('/dnd-update/api/audio_state.php', {
+      await fetch('/api/audio_state.php', {
         ...fetchConfig,
         method: 'POST',
         body: JSON.stringify({
@@ -137,7 +137,7 @@ export const AudioProvider = ({ children }) => {
     const selectedTrack = track || (playlist.tracks && playlist.tracks[0]);
     if (!selectedTrack) return;
 
-    const trackUrl = `/dnd-update/audio_files/${selectedTrack}`;
+    const trackUrl = `/audio_files/${selectedTrack}`;
     audioRef.current.src = trackUrl;
     audioRef.current.volume = volume;
     
@@ -225,7 +225,7 @@ export const AudioProvider = ({ children }) => {
   // Effect to sync audio playback with state
   useEffect(() => {
     if (isPlaying && currentTrack) {
-      const trackUrl = `/dnd-update/audio_files/${currentTrack}`;
+      const trackUrl = `/audio_files/${currentTrack}`;
       if (audioRef.current.src !== trackUrl) {
         audioRef.current.src = trackUrl;
       }
