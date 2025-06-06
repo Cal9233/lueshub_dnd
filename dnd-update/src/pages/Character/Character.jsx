@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useAuth } from '../../contexts/AuthContext';
 import { API_ENDPOINTS, api } from '../../config/api';
@@ -9,6 +9,7 @@ import FormInput from '../../components/Form/FormInput';
 import StatInput from '../../components/StatInput/StatInput';
 import HPBar from '../../components/HPBar/HPBar';
 import Header from '../../components/Headers/Header';
+import Notes from '../../components/Notes/Notes';
 import { FOOTER_LINKS } from '../../utilities/footer-links';
 import './Character.css';
 
@@ -34,7 +35,9 @@ const Character = () => {
     passivePerception: 10,
     gold: 0,
     silver: 0,
-    copper: 0
+    copper: 0,
+    notes_array: [],
+    background: ''
   });
 
   const { user } = useAuth();
@@ -90,14 +93,45 @@ const Character = () => {
     console.log('Long rest taken - HP restored');
   };
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
+    if (!id || id === 'new') return;
+    
     setSaving(true);
-    // TODO: Save character data to API
-    setTimeout(() => {
+    try {
+      // Prepare character data for API
+      const characterData = {
+        id: character.id,
+        name: character.name,
+        race: character.race,
+        class: character.class,
+        level: character.level,
+        armor_class: character.ac,
+        hit_points: character.currentHP,
+        max_hit_points: character.maxHP,
+        temp_hit_points: character.tempHP,
+        initiative: character.initiative,
+        speed: character.speed,
+        passive_perception: character.passivePerception,
+        proficiency_bonus: character.proficiencyBonus,
+        gold: character.gold,
+        silver: character.silver,
+        copper: character.copper,
+        notes: JSON.stringify(character.notes_array || []),
+        background: character.background || ''
+      };
+      
+      const response = await api.post(API_ENDPOINTS.SAVE_CHARACTER, characterData);
+      if (response.success) {
+        console.log('Character saved successfully');
+      } else {
+        console.error('Failed to save character:', response.message);
+      }
+    } catch (error) {
+      console.error('Error saving character:', error);
+    } finally {
       setSaving(false);
-      console.log('Character saved:', character);
-    }, 1000);
-  };
+    }
+  }, [id, character]);
 
   if (loading) {
     return (
@@ -134,6 +168,13 @@ const Character = () => {
               </Button>
               <Button onClick={handleLongRest}>
                 <i className="fas fa-bed"></i> Long Rest
+              </Button>
+              <Button 
+                variant="primary" 
+                onClick={handleSave}
+                disabled={saving}
+              >
+                <i className={`fas fa-${saving ? 'spinner fa-spin' : 'save'}`}></i> {saving ? 'Saving...' : 'Save'}
               </Button>
             </div>
             
@@ -309,6 +350,24 @@ const Character = () => {
             onMaxHPChange={(value) => setCharacter(prev => ({ ...prev, maxHP: value }))}
             onTempHPChange={(value) => setCharacter(prev => ({ ...prev, tempHP: value }))}
           />
+          
+          {/* Notes Section */}
+          <Notes 
+            notes={character.notes_array || []}
+            onChange={(newNotes) => setCharacter(prev => ({ ...prev, notes_array: newNotes }))}
+          />
+          
+          {/* Background Section */}
+          <section className="character-background">
+            <Header as="h3">Character Background</Header>
+            <textarea
+              className="background-textarea"
+              value={character.background || ''}
+              onChange={(e) => setCharacter(prev => ({ ...prev, background: e.target.value }))}
+              placeholder="Write your character's background story, personality traits, ideals, bonds, and flaws..."
+              rows="6"
+            />
+          </section>
           
           {/* More sections would go here: Abilities, Skills, Equipment, Spells, etc. */}
           <div className="coming-soon-section">
